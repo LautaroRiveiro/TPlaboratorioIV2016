@@ -4,12 +4,24 @@ app.config(function($stateProvider, $urlRouterProvider){
 	
 	$stateProvider
         .state('inicio', {
-            url: '/inicio',
+            url: '',
             templateUrl: 'templates/inicio.html'
         })
         .state('login', {
         	url: '/login',
         	templateUrl: 'templates/login.html'
+        })
+        .state('main', {
+            url: '/main',
+            templateUrl: 'templates/main.html'
+        })
+        .state('main.menu', {
+            url: '/menu',
+            templateUrl: 'templates/menu.html'
+        })
+        .state('main.cliente', {
+            url: '/cliente',
+            templateUrl: 'templates/cliente.html'
         })
         .state('encuesta', {
             url: '/encuesta',
@@ -17,5 +29,5 @@ app.config(function($stateProvider, $urlRouterProvider){
             controller: 'encuestaCtrl'
         })
 	
-	$urlRouterProvider.otherwise('/inicio');
+	$urlRouterProvider.otherwise('');
 });
