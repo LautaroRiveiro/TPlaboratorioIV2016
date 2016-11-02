@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router']);
+var app = angular.module("miApp", ['ui.router', 'encuesta.controller']);
 
 app.config(function($stateProvider, $urlRouterProvider){
 	
@@ -10,6 +10,11 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('login', {
         	url: '/login',
         	templateUrl: 'templates/login.html'
+        })
+        .state('encuesta', {
+            url: '/encuesta',
+            templateUrl: 'templates/encuesta.html',
+            controller: 'encuestaCtrl'
         })
 	
 	$urlRouterProvider.otherwise('/inicio');
