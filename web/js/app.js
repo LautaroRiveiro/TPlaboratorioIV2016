@@ -34,7 +34,7 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 
 
     //Configuración del Satellizer
-    $authProvider.loginUrl = "RUTA!!!/auth/login";
+    $authProvider.loginUrl = "TP/web/#/auth/login";
     $authProvider.signUpUrl = "RUTA!!!/auth/signup";
     $authProvider.tokenName = "token";
     $authProvider.tokenPrefix = "miApp";

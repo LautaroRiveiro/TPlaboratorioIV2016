@@ -1,13 +1,23 @@
-<div>
-<input type="text">
-<input type="text">
-<button>ingresar</button>
-<button>registrarse</button>
-<br><br>
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
-<button>enviar</button>
-</div>
+<!-- LOGIN -->
+<form ng-submit="Login()" method="post" ng-if="estado == 'login'">
+	<div class="form-group">
+		<input type="email" class="form-control" ng-model="usuario.email">
+	</div>
+	<div class="form-group">
+		<input type="password" class="form-control" ng-model="usuario.password">
+	</div>
+	<button type="submit" class="btn btn-default">INGRESAR</button>
+</form>
+<button class="btn btn-default" ng-click="Registrarse()" ng-if="estado == 'login'">REGISTRARSE</button>
+
+<!-- SIGN-UP -->
+<form ng-submit="SignUp()" method="post" ng-if="estado == 'signup'">
+	<input type="email" ng-model="usuario.email">
+	<input type="password" ng-model="usuario.password">
+	<input type="text">
+	<input type="text">
+	<input type="text">
+	<input type="text">
+	<button type="submit">ENVIAR</button>
+</form>
+<button class="btn btn-default" ng-click="Volver()" ng-if="estado == 'signup'">VOLVER</button>
