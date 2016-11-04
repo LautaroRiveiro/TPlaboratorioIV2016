@@ -7,6 +7,10 @@
 		echo "Hola, $usuario";
 	});
 
+	$app->get('/user/:usuario', function($usuario){
+		echo "Hola, $usuario";
+	});
+
 	$app->get('/', function(){
 		echo "Hola";
 	});
