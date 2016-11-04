@@ -1,24 +1,20 @@
 <?php 
-	require_once 'vendor/autoload.php';
-
-	$app = new \Slim\Slim();
-
-	$app->get('/j/{usuario}', function($r, $re){
-		echo "Hola, $usuario";
+	//Requerir autoload.php
+	require_once "vendor/autoload.php";
+	
+	//Instanciar una aplicación Slim
+	$app = new \Slim\App;
+	
+	//Definir las rutas con sus funciones:
+	//GET (consultar y leer recursos), POST (crear recursos), PUT (editar recursos) y DELETE (eliminar recursos)
+	$app->get("/", function(){
+		echo "Hola, mundo";
+	});
+	
+	$app->get("/user/{nombre}", function($rq, $rp){
+		echo "Hola, ".$rq->getAttribute('nombre');
 	});
 
-	$app->get('/user/:usuario', function($usuario){
-		echo "Hola, $usuario";
-	});
-
-	$app->get('/', function(){
-		echo "Hola";
-	});
-
+	//Correr la aplicación
 	$app->run();
-
-	/********************
-	* La ruta raiz es http://localhost:8080/TP/ws/
-	*********************
-	*/
  ?>
