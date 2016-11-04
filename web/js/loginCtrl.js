@@ -1,12 +1,12 @@
 angular.module('login.controllers', [])
 
-.controller('loginCtrl', function($scope, $auth, $location){
+.controller('loginCtrl', function($scope, $auth, $location, $http){
 	
 	$scope.estado = "login";
 	$scope.usuario = {};
 
 	$scope.Login = function(){
-		$auth.login($scope.usuario)
+		/*$auth.login($scope.usuario)
 		.then(function(){
 			//Logueo OK
 			console.info($scope.usuario);
@@ -14,6 +14,9 @@ angular.module('login.controllers', [])
 		.catch(function(error){
 			//Error de logueo
 			console.info(error);	
+		});*/
+		$http.get("http://localhost/TPlaboratorioIV2016/ws/user/lautaro").then(function(resp){
+			console.info(resp);
 		});
 	}
 

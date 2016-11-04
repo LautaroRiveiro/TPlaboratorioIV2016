@@ -11,8 +11,10 @@
 		echo "Hola, mundo";
 	});
 	
-	$app->get("/user/{nombre}", function($rq, $rp){
-		echo "Hola, ".$rq->getAttribute('nombre');
+	$app->get("/user/{nombre}", function($request, $response, $args){
+		//echo "Hola, ".$rq->getAttribute('nombre');
+		return $args["nombre"];
+
 	});
 
 	//Correr la aplicación
