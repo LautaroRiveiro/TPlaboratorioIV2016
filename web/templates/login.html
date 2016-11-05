@@ -1,5 +1,5 @@
 <!-- LOGIN -->
-<form ng-submit="Login()" method="post" ng-if="estado == 'login'">
+<form ng-submit="Loguear()" method="post" ng-if="estado == 'login'">
 	<div class="form-group">
 		<input type="email" class="form-control" ng-model="usuario.email">
 	</div>
@@ -12,8 +12,8 @@
 
 <!-- SIGN-UP -->
 <form ng-submit="SignUp()" method="post" ng-if="estado == 'signup'">
-	<input type="email" ng-model="usuario.email">
-	<input type="password" ng-model="usuario.password">
+	<input type="email" ng-model="nuevo.email">
+	<input type="password" ng-model="nuevo.password">
 	<input type="text">
 	<input type="text">
 	<input type="text">

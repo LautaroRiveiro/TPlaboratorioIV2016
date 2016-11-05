@@ -2,6 +2,7 @@ var app = angular.module("miApp", ['ui.router', 'satellizer', 'encuesta.controll
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
+    //Configuración del ui-router
 	$stateProvider
         .state('inicio', {
             url: '',
@@ -34,10 +35,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 
 
     //Configuración del Satellizer
-    $authProvider.loginUrl = "TP/web/#/auth/login";
-    $authProvider.signUpUrl = "RUTA!!!/auth/signup";
+    $authProvider.loginUrl = "TPlaboratorioIV2016/ws/auth/login";
+    $authProvider.signUpUrl = "TPlaboratorioIV2016/ws/auth/signup";
     $authProvider.tokenName = "token";
     $authProvider.tokenPrefix = "miApp";
+    $authProvider.authHeader = 'data';
 
 
 });
