@@ -23,7 +23,7 @@ angular.module('login.controllers', [])
 		$auth.login($scope.usuario)
 		.then(function(resp){
 			//Logueo OK
-			console.info("Respuesta: ", resp.data);
+			console.info("Respuesta: ", resp);
 		})
 		.catch(function(error){
 			//Error de logueo
