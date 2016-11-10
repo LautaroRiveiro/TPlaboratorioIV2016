@@ -5,11 +5,17 @@ angular.module('login.controllers', [])
 	$scope.estado = "login";
 	$scope.usuario = {};
 	$scope.nuevo = {};
+	$scope.nuevo.perfil = "Cliente";
 
 	//Valores para test:
 	$scope.usuario.email = "admin@admin.com";
 	$scope.usuario.password = "1234";
-
+	$scope.nuevo.nombre = "Prueba";
+	$scope.nuevo.apellido = "Test";
+	$scope.nuevo.email = "@prueba.com";
+	$scope.nuevo.sexo = "M";
+	$scope.nuevo.password = "1234";
+	$scope.nuevo.confirmarClave = "1234";
 
 	/* ¿Qué hago en Loguear()?
      * Llamo por POST (http) al authProvider, que configuré en app.config.
@@ -28,27 +34,47 @@ angular.module('login.controllers', [])
 				$state.go("inicio");
 			}
 			else{
-				console.log("Usuario o contraseña incorrecta")
+				console.log("Usuario o contraseña incorrecta");
+				console.log(resp);
 				$scope.usuario.password = "";
 			}
 		})
 		.catch(function(error){
 			//Error durante logueo
-			console.info("Error de conexión", error);	
+			console.info("Error de conexión", error);
 		});
-	}
+	};
 
 	$scope.SignUp = function(){
 		console.log("FF");
-		$auth.removeToken();
-		console.info("isAuthenticated: ", $auth.isAuthenticated());
+		//$auth.removeToken();
+		//console.info("isAuthenticated: ", $auth.isAuthenticated());
+
+
+
+      $auth.signup($scope.nuevo)
+        .then(function(response) {
+          console.info("Ok", response);
+          console.info("Nuevo usuario: ", $auth.getPayload());
+          $state.go("inicio");
+        })
+        .catch(function(error) {
+			//Error durante registración
+			console.info("Error de conexión", error);
+        });
+
+
+
 	}
 
 	$scope.Registrarse = function(){
 		$scope.estado = "signup";
+		console.info("getPayload: ", $auth.getPayload());
 	}
 
 	$scope.Volver = function(){
+		for (var campo in $scope.nuevo) delete $scope.nuevo[campo];
+		$scope.nuevo.perfil = "Cliente";
 		$scope.estado = "login";
 	}
 })

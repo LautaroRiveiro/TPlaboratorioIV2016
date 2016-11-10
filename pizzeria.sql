@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-11-2016 a las 05:08:41
+-- Tiempo de generación: 10-11-2016 a las 06:21:38
 -- Versión del servidor: 10.1.10-MariaDB
 -- Versión de PHP: 5.6.19
 
@@ -84,39 +84,45 @@ INSERT INTO `productos` (`id`, `descripcion`, `categoria`, `precio`) VALUES
 --
 
 CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
   `apellido` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `sexo` varchar(50) DEFAULT NULL,
-  `perfil` varchar(15) DEFAULT NULL
+  `perfil` varchar(15) DEFAULT NULL,
+  `password` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `email`, `sexo`, `perfil`) VALUES
-(1, 'Administrador', 'Administrador', 'admin@admin.com', 'Masculino', 'Administrador'),
-(2, 'Brian', 'Freeman', 'encargado@encargado.com', 'Masculino', 'Encargado'),
-(3, 'Eric', 'Daniels', 'edaniels2@com.com', 'Masculino', 'Encargado'),
-(4, 'Lisa', 'Burke', 'lburke3@ezinearticles.com', 'Femenino', 'Encargado'),
-(5, 'Julie', 'Mccoy', 'empleado@empleado.com', 'Femenino', 'Empleado'),
-(6, 'Robert', 'Bell', 'rbell5@fc2.com', 'Masculino', 'Empleado'),
-(7, 'Donald', 'Harris', 'dharris6@blogtalkradio.com', 'Masculino', 'Empleado'),
-(8, 'Judith', 'Ross', 'jross7@freewebs.com', 'Femenino', 'Empleado'),
-(9, 'Mildred', 'Lane', 'mlane8@wikispaces.com', 'Femenino', 'Empleado'),
-(10, 'Howard', 'Collins', 'hcollins9@tamu.edu', 'Masculino', 'Empleado'),
-(11, 'Nicole', 'Little', 'nlittlea@oakley.com', 'Femenino', 'Empleado'),
-(12, 'Phyllis', 'Robertson', 'probertsonb@sogou.com', 'Femenino', 'Empleado'),
-(13, 'Brenda', 'Meyer', 'cliente@cliente.com', 'Femenino', 'Cliente'),
-(14, 'Todd', 'Cook', 'tcookd@globo.com', 'Masculino', 'Cliente'),
-(15, 'Benjamin', 'Peters', 'bpeterse@newyorker.com', 'Masculino', 'Cliente'),
-(16, 'Matthew', 'Marshall', 'mmarshallf@nps.gov', 'Masculino', 'Cliente'),
-(17, 'Douglas', 'Rice', 'driceg@g.co', 'Masculino', 'Cliente'),
-(18, 'Joyce', 'Woods', 'jwoodsh@php.net', 'Femenino', 'Cliente'),
-(19, 'Fred', 'Mcdonald', 'fmcdonaldi@phoca.cz', 'Masculino', 'Cliente'),
-(20, 'Philip', 'Jones', 'pjonesj@de.vu', 'Masculino', 'Cliente');
+INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `email`, `sexo`, `perfil`, `password`) VALUES
+(1, 'Administrador', 'Administrador', 'admin@admin.com', 'Masculino', 'Administrador', '1234'),
+(2, 'Brian', 'Freeman', 'encargado@encargado.com', 'Masculino', 'Encargado', '1234'),
+(3, 'Eric', 'Daniels', 'edaniels2@com.com', 'Masculino', 'Encargado', '1234'),
+(4, 'Lisa', 'Burke', 'lburke3@ezinearticles.com', 'Femenino', 'Encargado', '1234'),
+(5, 'Julie', 'Mccoy', 'empleado@empleado.com', 'Femenino', 'Empleado', '1234'),
+(6, 'Robert', 'Bell', 'rbell5@fc2.com', 'Masculino', 'Empleado', '1234'),
+(7, 'Donald', 'Harris', 'dharris6@blogtalkradio.com', 'Masculino', 'Empleado', '1234'),
+(8, 'Judith', 'Ross', 'jross7@freewebs.com', 'Femenino', 'Empleado', '1234'),
+(9, 'Mildred', 'Lane', 'mlane8@wikispaces.com', 'Femenino', 'Empleado', '1234'),
+(10, 'Howard', 'Collins', 'hcollins9@tamu.edu', 'Masculino', 'Empleado', '1234'),
+(11, 'Nicole', 'Little', 'nlittlea@oakley.com', 'Femenino', 'Empleado', '1234'),
+(12, 'Phyllis', 'Robertson', 'probertsonb@sogou.com', 'Femenino', 'Empleado', '1234'),
+(13, 'Brenda', 'Meyer', 'cliente@cliente.com', 'Femenino', 'Cliente', '1234'),
+(14, 'Todd', 'Cook', 'tcookd@globo.com', 'Masculino', 'Cliente', '1234'),
+(15, 'Benjamin', 'Peters', 'bpeterse@newyorker.com', 'Masculino', 'Cliente', '1234'),
+(16, 'Matthew', 'Marshall', 'mmarshallf@nps.gov', 'Masculino', 'Cliente', '1234'),
+(17, 'Douglas', 'Rice', 'driceg@g.co', 'Masculino', 'Cliente', '1234'),
+(18, 'Joyce', 'Woods', 'jwoodsh@php.net', 'Femenino', 'Cliente', '1234'),
+(19, 'Fred', 'Mcdonald', 'fmcdonaldi@phoca.cz', 'Masculino', 'Cliente', '1234'),
+(20, 'Philip', 'Jones', 'pjonesj@de.vu', 'Masculino', 'Cliente', '1234'),
+(21, 'Prueba', 'Test', '44@prueba.com', 'M', 'Cliente', '1234'),
+(22, 'Prueba', 'Test', '88@prueba.com', 'M', 'Cliente', '1234'),
+(23, 'Prueba', 'Test', '997@prueba.com', 'M', 'Cliente', '1234'),
+(24, 'Prueba', 'Test', '33@prueba.com', 'M', 'Cliente', '1234'),
+(25, 'Prueba', 'Test', '50@prueba.com', 'M', 'Cliente', '1234');
 
 --
 -- Índices para tablas volcadas
@@ -146,6 +152,15 @@ ALTER TABLE `productos`
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
