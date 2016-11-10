@@ -1,6 +1,6 @@
 angular.module('login.controllers', [])
 
-.controller('loginCtrl', function($scope, $auth, $location, $http){
+.controller('loginCtrl', function($scope, $auth, $location, $http, $state){
 	
 	$scope.estado = "login";
 	$scope.usuario = {};
@@ -22,17 +22,26 @@ angular.module('login.controllers', [])
 		//Al combinarlo con Slim Framework es necesario configurar $app->post() y no otro.
 		$auth.login($scope.usuario)
 		.then(function(resp){
-			//Logueo OK
-			console.info("Respuesta: ", resp);
+			if($auth.isAuthenticated()){
+				console.info("response: ", resp);
+				console.info("getPayload: ", $auth.getPayload());
+				$state.go("inicio");
+			}
+			else{
+				console.log("Usuario o contraseña incorrecta")
+				$scope.usuario.password = "";
+			}
 		})
 		.catch(function(error){
-			//Error de logueo
+			//Error durante logueo
 			console.info("Error de conexión", error);	
 		});
 	}
 
 	$scope.SignUp = function(){
-		
+		console.log("FF");
+		$auth.removeToken();
+		console.info("isAuthenticated: ", $auth.isAuthenticated());
 	}
 
 	$scope.Registrarse = function(){
