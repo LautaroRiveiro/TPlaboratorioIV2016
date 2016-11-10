@@ -1,8 +1,20 @@
 <button ng-if="perfil == 'Administrador'">ALTA USUARIO</button>
-<button ng-if="perfil == 'Cliente'">ALTA PRODUCTO U OFERTA</button>
-<button ng-if="perfil == 'Cliente'">ALTA PEDIDO</button>
-<button ng-if="perfil == 'Cliente'">ALTA EMPLEADO</button>
-<button ng-if="perfil == 'Cliente'">ALTA LOCAL</button>
-<button ng-if="perfil == 'Cliente'">VER PEDIDOS</button>
-<button ng-if="perfil == 'Cliente'">VER CLIENTES</button>
-<button>VER ESTADISTICAS</button>
+<button ng-if="perfil == 'Administrador' || perfil == 'Encargado'">ALTA EMPLEADO</button>
+<button ng-if="perfil == 'Administrador'">ALTA LOCAL</button>
+<button ng-if="perfil == 'Administrador'">VER ESTADISTICAS</button>
+
+<button ng-if="perfil == 'Encargado'">MODIFICAR EMPLEADO</button>
+<button ng-if="perfil == 'Encargado'">MODIFICAR PEDIDO</button>
+<button ng-if="perfil == 'Encargado'">MODIFICAR PRODUCTO U OFERTA</button>
+<button ng-if="perfil == 'Encargado'">MODIFICAR USUARIO</button>
+<button ng-if="perfil == 'Encargado'">MODIFICAR LOCAL</button>
+
+<button ng-if="perfil == 'Empleado' || perfil == 'Encargado'">ALTA PEDIDO</button>
+<button ng-if="perfil == 'Empleado' || perfil == 'Encargado'">ALTA CLIENTE</button>
+<button ng-if="perfil == 'Empleado' || perfil == 'Encargado'">ALTA PRODUCTO U OFERTA</button>
+<button ng-if="perfil == 'Empleado'">VER PEDIDOS</button>
+<button ng-if="perfil == 'Empleado'">VER CLIENTES</button>
+
+<button ng-if="perfil == 'Cliente'">VER OFERTAS</button>
+<button ng-if="perfil == 'Cliente'">HACER RESERVA</button>
+<button ng-if="perfil == 'Cliente'">HACER PEDIDO PARA FIESTA</button>
