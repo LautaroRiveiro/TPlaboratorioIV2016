@@ -1,8 +1,8 @@
-<button>ALTA USUARIO</button>
-<button>ALTA PRODUCTO U OFERTA</button>
-<button>ALTA PEDIDO</button>
-<button>ALTA EMPLEADO</button>
-<button>ALTA LOCAL</button>
-<button>VER PEDIDOS</button>
-<button>VER CLIENTES</button>
+<button ng-if="perfil == 'Administrador'">ALTA USUARIO</button>
+<button ng-if="perfil == 'Cliente'">ALTA PRODUCTO U OFERTA</button>
+<button ng-if="perfil == 'Cliente'">ALTA PEDIDO</button>
+<button ng-if="perfil == 'Cliente'">ALTA EMPLEADO</button>
+<button ng-if="perfil == 'Cliente'">ALTA LOCAL</button>
+<button ng-if="perfil == 'Cliente'">VER PEDIDOS</button>
+<button ng-if="perfil == 'Cliente'">VER CLIENTES</button>
 <button>VER ESTADISTICAS</button>

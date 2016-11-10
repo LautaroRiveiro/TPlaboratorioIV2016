@@ -19,7 +19,8 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         })
         .state('main.menu', {
             url: '/menu',
-            templateUrl: 'templates/menu.html'
+            templateUrl: 'templates/menu.html',
+            controller: 'menuCtrl'
         })
         .state('main.cliente', {
             url: '/cliente',

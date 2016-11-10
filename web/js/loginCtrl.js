@@ -31,7 +31,7 @@ angular.module('login.controllers', [])
 			if($auth.isAuthenticated()){
 				console.info("response: ", resp);
 				console.info("getPayload: ", $auth.getPayload());
-				$state.go("inicio");
+				$state.go("main.menu");
 			}
 			else{
 				console.log("Usuario o contraseña incorrecta");
