@@ -36,6 +36,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             templateUrl: 'templates/altaLocal.html',
             controller: 'altaLocalCtrl'
         })
+        .state('main.altaProducto', {
+            url: '/altaProducto',
+            templateUrl: 'templates/altaProducto.html',
+            controller: 'altaProductoCtrl'
+        })
         .state('encuesta', {
             url: '/encuesta',
             templateUrl: 'templates/encuesta.html',

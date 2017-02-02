@@ -111,4 +111,79 @@ angular.module('starter.controllers', [])
 			console.info("Error: ", error);
 		});
 	}
+})
+
+.controller('altaProductoCtrl', function($scope, $auth, $http, FileUploader){
+	//Recupero datos de la sesión
+	$scope.usuario = {};
+	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
+	console.info("usuario", $scope.usuario);
+
+	//Objeto para el nuevo producto
+	$scope.nuevo = {}
+	$scope.nuevo.precio = 60;
+	$scope.nuevo.descripcion = "Pizza grande de muzzarella";
+	$scope.nuevo.categoria = "Comida";
+	$scope.nuevo.foto1 = "sinfoto.jpg";
+	$scope.nuevo.foto2 = "sinfoto.jpg";
+	$scope.nuevo.foto3 = "sinfoto.jpg";
+
+	//Configuración del FileUploader
+	//$scope.uploader = new FileUploader({url: '../ws/clases/upload.php'});
+	$scope.uploader = new FileUploader({url: 'http://localhost/TPlaboratorioIV2016/ws/files'});
+	console.info("Uploader", $scope.uploader);
+	$scope.uploader.queueLimit = 3; // indico cuantos archivos permito cargar
+	/* Si quiero restringir los archivos a imagenes añado este filtro */
+	$scope.uploader.filters.push({
+        name: 'imageFilter',
+        fn: function(item, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+    $scope.cargar = function(){
+    	/** llamo a la funcion uploadAll para cargar toda la cola de archivos **/
+    	$scope.uploader.uploadAll();
+    	/** agrego mi funcionalidad **/
+	}
+	$scope.uploader.onCompleteAll = function() {
+	    console.info('Se cargó con éxito');
+    };
+
+    //Guardar el producto en la base de datos
+	$scope.Guardar = function(){
+		//Guardo las fotos en el servidor
+		$scope.cargar();
+		
+		//Le paso el nombre de las fotos a los campos del producto
+		if($scope.uploader.queue.length == 1){
+			$scope.nuevo.foto1 = $scope.uploader.queue[0].file.name;
+		}
+		else if($scope.uploader.queue.length == 2){
+			$scope.nuevo.foto1 = $scope.uploader.queue[0].file.name;
+			$scope.nuevo.foto2 = $scope.uploader.queue[1].file.name;
+		}
+		else if($scope.uploader.queue.length == 3){
+			$scope.nuevo.foto1 = $scope.uploader.queue[0].file.name;
+			$scope.nuevo.foto2 = $scope.uploader.queue[1].file.name;
+			$scope.nuevo.foto3 = $scope.uploader.queue[2].file.name;
+		}		
+		console.info("Producto",$scope.nuevo);
+
+		$http.post("http://localhost/TPlaboratorioIV2016/ws/productos/"+JSON.stringify($scope.nuevo))
+		.then(function(data){
+			console.info("Datos: ", data);
+			alert("Alta realizada con éxito");
+			for (var campo in $scope.nuevo) {
+			    $scope.nuevo[campo] = "";
+			}
+			$scope.nuevo.foto1 = "sinfoto.jpg";
+			$scope.nuevo.foto2 = "sinfoto.jpg";
+			$scope.nuevo.foto3 = "sinfoto.jpg";
+			$scope.uploader.clearQueue();
+			console.info('Queue vacía',$scope.uploader.queue);
+		}, function(error){
+			console.info("Error: ", error);
+		});
+	}
 });

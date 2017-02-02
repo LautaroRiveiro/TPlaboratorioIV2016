@@ -1,0 +1,70 @@
+<div style="margin: 10px;margin:auto; display:block; width: 60%;">
+    <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
+      <!-- DESCRIPCIÓN -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.descripcion.$dirty && formAlta.descripcion.$invalid, 'has-success has-feedback': formAlta.descripcion.$valid}">
+            <label for="descripcion" class="control-label">Descripción</label>
+            <input type="text" class="form-control" name="descripcion" id="descripcion" ng-model="nuevo.descripcion" placeholder="Ingrese Descripción"required maxlength=100/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.descripcion.$dirty && formAlta.descripcion.$invalid, 'glyphicon-ok': formAlta.descripcion.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.descripcion.$dirty && formAlta.descripcion.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+      <!-- PRECIO -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.precio.$dirty && formAlta.precio.$invalid, 'has-success has-feedback': formAlta.precio.$valid}">
+            <label for="precio" class="control-label">Precio</label>
+            <input type="number" class="form-control" name="precio" id="precio" ng-model="nuevo.precio" placeholder="Ingrese Precio"required max=1000/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.precio.$dirty && formAlta.precio.$invalid, 'glyphicon-ok': formAlta.precio.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.precio.$dirty && formAlta.precio.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+        <!-- CATEGORÍA -->
+        <div class="form-group">
+            <label class="control-label">Categoría</label>
+            <br>
+            <select class="form-control" name="categoria" ng-model="nuevo.categoria" required>
+                <option value="Comida">Comida</option>
+                <option value="Bebida">Bebida</option>
+                <option value="Postre">Postre</option>
+            </select>
+        </div>
+
+      <!-- IMÁGENES -->
+        <label class="control-label">Imágenes</label>
+        <input type="file" nv-file-select uploader="uploader" multiple/>.
+        <!-- Si quiero usar drag and drop uso las directivas nvFileDrop y nvFileOver. -->
+        <div nv-file-drop="" uploader="uploader">
+            <div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
+                O arrastre imágenes acá
+            </div>
+        </div>
+
+        <ul>
+            <!-- Muestro los datos de los archivos a cargar -->
+            <li ng-repeat="item in uploader.queue">
+                <!-- nombre del archivo -->
+                Archivo: <span ng-bind="item.file.name"></span><br/>
+                <!-- imagen del archivo -->
+                <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                <!-- boton upload. Lo puedo usar para carar las fotos o crear
+                    mi propia funcion y llamar a uploader.uploadAll() -->
+                <!-- <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                    <span class="glyphicon glyphicon-upload"></span> Upload
+                </button> -->
+
+                <!-- boton cancel -->            
+                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                </button>
+
+                <!-- boton remove -->
+                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                    <span class="glyphicon glyphicon-trash"></span> Remove
+                </button>
+            </li>       
+        </ul>
+
+
+      <!-- ENVIAR -->
+        <button class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</button>
+
+    </form>
+</div>

@@ -238,6 +238,27 @@
 		return $response;
 	});
 
+#PRODUCTOS
+	$app->post("/productos/{producto}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del producto en un stdClass
+		$producto = json_decode($args["producto"]); // $producto->nombre = "Pizza"
+
+		//Modifico el producto
+		try{
+			require_once "clases/producto.php";
+			$respuesta["idAgregado"] = Producto::Agregar($producto);
+			$respuesta["mensaje"] = "Se agregó el producto #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
 	//Correr la aplicación
 	$app->run();
  ?>
