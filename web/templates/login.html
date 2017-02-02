@@ -8,7 +8,16 @@
 	</div>
 	<button type="submit" class="btn btn-default">INGRESAR</button>
 </form>
-<button class="btn btn-default" ng-click="Registrarse()" ng-if="estado == 'login'">REGISTRARSE</button>
+
+<div ng-if="estado == 'login'" style="margin: 10px;margin:auto; display:block; width: 60%;">
+    <button class="btn btn-info" ng-click="Registrarse()" style="margin:auto; display:block;">REGISTRARSE</button>
+    <br>
+    <button class="btn btn-default btn-block" ng-click="CargarDatos('CLIENTE')">CLIENTE</button>
+    <button class="btn btn-default btn-block" ng-click="CargarDatos('EMPLEADO')">EMPLEADO</button>
+    <button class="btn btn-default btn-block" ng-click="CargarDatos('ENCARGADO')">ENCARGADO</button>
+    <button class="btn btn-default btn-block" ng-click="CargarDatos('ADMINISTRADOR')">ADMINISTRADOR</button>
+    <button class="btn btn-default btn-block" ng-click="CargarDatos('')">LIMPIAR</button> 
+</div>
 
 <!-- SIGN-UP -->
 <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate ng-submit="SignUp()" method="post" ng-if="estado == 'signup'">

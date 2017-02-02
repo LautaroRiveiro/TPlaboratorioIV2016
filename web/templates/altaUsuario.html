@@ -1,0 +1,68 @@
+<div style="margin: 10px;margin:auto; display:block; width: 60%;">
+    <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
+      <!-- NOMBRE -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.nombre.$dirty && formAlta.nombre.$invalid, 'has-success has-feedback': formAlta.nombre.$valid}">
+            <label for="nombre" class="control-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="nombre" ng-model="nuevo.nombre" placeholder="Ingrese Nombre"required maxlength=30/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.nombre.$dirty && formAlta.nombre.$invalid, 'glyphicon-ok': formAlta.nombre.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.nombre.$dirty && formAlta.nombre.$invalid">* Este campo es obligatorio</small>      
+        </div>
+
+      <!-- APELLIDO -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.apellido.$dirty && formAlta.apellido.$invalid, 'has-success has-feedback': formAlta.apellido.$valid}">
+            <label for="apellido" class="control-label">Apellido</label>
+            <input type="text" class="form-control" name="apellido" id="apellido" ng-model="nuevo.apellido" placeholder="Ingrese Apellido"required maxlength=30/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.apellido.$dirty && formAlta.apellido.$invalid, 'glyphicon-ok': formAlta.apellido.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.apellido.$dirty && formAlta.apellido.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="form-group">
+            <label class="control-label">Perfil</label>
+            <br>
+            <select class="form-control" name="perfil" ng-model="nuevo.perfil" required>
+                <option value="Cliente">Cliente</option>
+                <option value="Encargado">Encargado</option>
+                <option value="Empleado">Empleado</option>
+            </select>
+        </div>
+
+        <!-- SEXO -->
+        <div class="form-group">
+            <label class="control-label">Sexo</label>
+            <br>
+            <label class="radio-inline"><input type="radio" name="sexo" value="M" ng-model="nuevo.sexo" required/>Masculino</label>
+            <label class="radio-inline"><input type="radio" name="sexo" value="F" ng-model="nuevo.sexo"/>Femenino</label>
+        </div>
+
+        <!-- E MAIL -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.correo.$dirty && formAlta.correo.$invalid, 'has-success has-feedback': formAlta.correo.$valid}">
+            <label for="correo" class="control-label">Correo</label>
+            <input type="email" class="form-control" name="correo" id="correo" ng-model="nuevo.email" placeholder="Correo electrónico" required/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.correo.$dirty && formAlta.correo.$invalid, 'glyphicon-ok': formAlta.correo.$valid}"></span>
+            <span ng-if="formAlta.correo.$dirty && formAlta.correo.$invalid && formAlta.correo != ''">
+                <small class="help-block" ng-show="formAlta.correo.$error.required">* Este campo es obligatorio</small>
+                <small class="help-block" ng-show="formAlta.correo.$error.email">* El email ingresado no es válido</small>
+            </span>
+        </div>
+
+      <!-- PASSWORD -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.clave.$dirty && formAlta.clave.$invalid, 'has-success has-feedback': formAlta.clave.$valid}">
+            <label for="clave" class="control-label">Clave</label>
+            <input type="password" class="form-control" name="clave" id="clave" ng-model="nuevo.password" placeholder="Ingrese Clave" required minlength=4/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.clave.$dirty && formAlta.clave.$invalid, 'glyphicon-ok': formAlta.clave.$valid}"></span>
+            <span ng-if="formAlta.clave.$dirty && formAlta.clave.$invalid">
+                <small class="help-block" ng-show="formAlta.clave.$error.required">* Este campo es obligatorio</small>
+                <small class="help-block" ng-show="formAlta.clave.$error.minlength">* Clave demasiado corta (mínimo 4 caracteres)</small>
+            </span>
+        </div>
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.confirmarClave.$dirty && formAlta.confirmarClave.$invalid || (nuevo.password != nuevo.confirmarClave), 'has-success has-feedback': formAlta.confirmarClave.$valid}">
+            <input type="password" class="form-control" name="confirmarClave" id="confirmarClave" ng-model="nuevo.confirmarClave" placeholder="Reingrese Clave" required minlength=4 ng-disabled="formAlta.clave.$invalid"/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.confirmarClave.$dirty && formAlta.confirmarClave.$invalid || (nuevo.password != nuevo.confirmarClave), 'glyphicon-ok': formAlta.confirmarClave.$valid}"></span>
+            <small class="help-block" ng-show="formAlta.confirmarClave.$dirty && (nuevo.password != nuevo.confirmarClave)">Las claves no coinciden</small>
+        </div>
+      
+      <button class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid || (nuevo.password != nuevo.confirmarClave)"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</button>
+
+    </form>
+</div>

@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'encuesta.controller', 'login.controllers']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
@@ -19,11 +19,22 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         })
         .state('main.menu', {
             url: '/menu',
-            templateUrl: 'templates/menu.html'
+            templateUrl: 'templates/menu.html',
+            controller: 'menuCtrl'
         })
         .state('main.cliente', {
             url: '/cliente',
             templateUrl: 'templates/cliente.html'
+        })
+        .state('main.altaUsuario', {
+            url: '/altaUsuario',
+            templateUrl: 'templates/altaUsuario.html',
+            controller: 'altaUsuarioCtrl'
+        })
+        .state('main.altaLocal', {
+            url: '/altaLocal',
+            templateUrl: 'templates/altaLocal.html',
+            controller: 'altaLocalCtrl'
         })
         .state('encuesta', {
             url: '/encuesta',

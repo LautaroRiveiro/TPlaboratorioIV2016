@@ -1,6 +1,6 @@
 angular.module('login.controllers', [])
 
-.controller('loginCtrl', function($scope, $auth, $location, $http, $state){
+.controller('loginCtrl', function($scope, $auth, $location, $http, $state, usuario){
 	
 	$scope.estado = "login";
 	$scope.usuario = {};
@@ -8,8 +8,6 @@ angular.module('login.controllers', [])
 	$scope.nuevo.perfil = "Cliente";
 
 	//Valores para test:
-	$scope.usuario.email = "admin@admin.com";
-	$scope.usuario.password = "1234";
 	$scope.nuevo.nombre = "Prueba";
 	$scope.nuevo.apellido = "Test";
 	$scope.nuevo.email = "@prueba.com";
@@ -24,25 +22,7 @@ angular.module('login.controllers', [])
      * Si hubo algún error en la conexión, se ejecuta la función de error del then(), donde muestro por consola el error.
     */
 	$scope.Loguear = function(){
-		//$auth.login() hace una llamada de tipo POST al $authProvider.loginUrl establecido en app.js
-		//Al combinarlo con Slim Framework es necesario configurar $app->post() y no otro.
-		$auth.login($scope.usuario)
-		.then(function(resp){
-			if($auth.isAuthenticated()){
-				console.info("response: ", resp);
-				console.info("getPayload: ", $auth.getPayload());
-				$state.go("inicio");
-			}
-			else{
-				console.log("Usuario o contraseña incorrecta");
-				console.log(resp);
-				$scope.usuario.password = "";
-			}
-		})
-		.catch(function(error){
-			//Error durante logueo
-			console.info("Error de conexión", error);
-		});
+		usuario.Loguear($scope.usuario);
 	};
 
 	$scope.SignUp = function(){
@@ -50,20 +30,21 @@ angular.module('login.controllers', [])
 		//$auth.removeToken();
 		//console.info("isAuthenticated: ", $auth.isAuthenticated());
 
-
-
       $auth.signup($scope.nuevo)
         .then(function(response) {
-          console.info("Ok", response);
-          console.info("Nuevo usuario: ", $auth.getPayload());
-          $state.go("inicio");
+            console.info("Ok", response);
+            console.info("Nuevo usuario: ", $auth.getPayload());
+			if($auth.getPayload().perfil == "Cliente"){
+				$state.go("main.cliente");
+			}
+			else{
+				$state.go("main.menu");	
+			}
         })
         .catch(function(error) {
 			//Error durante registración
 			console.info("Error de conexión", error);
         });
-
-
 
 	}
 
@@ -77,4 +58,29 @@ angular.module('login.controllers', [])
 		$scope.nuevo.perfil = "Cliente";
 		$scope.estado = "login";
 	}
+
+	$scope.CargarDatos = function(tipo){
+		switch(tipo){
+			case 'CLIENTE':
+				$scope.usuario.email = "cliente@cliente.com";
+				$scope.usuario.password = "1234";
+				break;
+			case 'ENCARGADO':
+				$scope.usuario.email = "encargado@encargado.com";
+				$scope.usuario.password = "1234";
+				break;
+			case 'EMPLEADO':
+				$scope.usuario.email = "empleado@empleado.com";
+				$scope.usuario.password = "1234";
+				break;
+			case 'ADMINISTRADOR':
+				$scope.usuario.email = "admin@admin.com";
+				$scope.usuario.password = "1234";
+				break;
+			default:
+				$scope.usuario.email = "";
+				$scope.usuario.password = "";
+				break;
+		}
+	}	
 })

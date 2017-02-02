@@ -13,7 +13,8 @@
 	$app->get("/", function(){
 		echo "Bienvenidos al WS!";
 	});
-	
+
+#LOGIN
 	$app->post("/auth/login", function($request, $response, $args){
 		//Recupero desde $request las credenciales ingresadas. Usar getParsedBody() ya incluye un json_decode.
 		//$credenciales = $request->getParsedBody();
@@ -120,7 +121,123 @@
 		$response->getBody()->write(json_encode($respuesta));
 		return $response;
 	});
-	
+
+
+#USUARIOS
+	$app->post("/usuarios/{usuario}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del usuario en un stdClass
+		$usuario = json_decode($args["usuario"]); // $usuario->nombre = "Lautaro"
+
+		//Modifico el usuario
+		try{
+			require_once "clases/usuario.php";
+			$respuesta["idAgregado"] = Usuario::Agregar($usuario);
+			$respuesta["mensaje"] = "Se agregó el usuario #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+	$app->get("/usuarios", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de usuarios";
+
+		//Traigo todos los usuarios
+		require_once "clases/usuario.php";
+		$usuarios = Usuario::TraerTodosLosUsuarios();		
+		$respuesta["usuarios"] = $usuarios;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
+	$app->delete("/usuarios/{id}", function($request, $response, $args){
+		//Recupero el Id del usuario
+		$id = json_decode($args["id"]);
+
+		//Elimino el usuario
+		try{
+			require_once "clases/usuario.php";
+			$respuesta["cantidad"] = Usuario::Eliminar($id);
+			$respuesta["mensaje"] = "Se eliminaron ".$respuesta["cantidad"]." usuarios";
+		}
+		catch (Exception $e){
+			$respuesta["nuevoId"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+	$app->put("/usuarios/{usuario}", function($request, $response, $args){
+		//Recupero los datos del formulario de modificación del usuario en un stdClass
+		$usuario = json_decode($args["usuario"]); // $usuario->nombre = "Lautaro"
+
+		//Modifico el usuario
+		try{
+			require_once "clases/usuario.php";
+			$respuesta["cantidad"] = Usuario::Modificar($usuario);
+			$respuesta["mensaje"] = "Se modificaron ".$respuesta["cantidad"]." usuarios";
+		}
+		catch (Exception $e){
+			$respuesta["nuevoId"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+
+#ARCHIVOS
+	$app->post("/files", function($request, $response, $args){
+		if ( !empty( $_FILES ) ) {
+		    $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
+		    // $uploadPath = dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $_FILES[ 'file' ][ 'name' ];
+		    //$uploadPath = "../". DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $_FILES[ 'file' ][ 'name' ];
+		    $uploadPath = 'img' . DIRECTORY_SEPARATOR . $_FILES[ 'file' ][ 'name' ];
+		    move_uploaded_file( $tempPath, $uploadPath );
+		    $respuesta["mensaje"] = 'Archivo Cargado!';
+		} else {
+		    $respuesta["error"] = 'No se cargo el archivo';
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+#LOCALES
+	$app->post("/locales/{local}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del local en un stdClass
+		$local = json_decode($args["local"]); // $local->direccion = "Prueba 123"
+
+		//Modifico el local
+		try{
+			require_once "clases/local.php";
+			$respuesta["idAgregado"] = Local::Agregar($local);
+			$respuesta["mensaje"] = "Se agregó el local #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
 	//Correr la aplicación
 	$app->run();
  ?>

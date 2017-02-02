@@ -1,8 +1,14 @@
-<button>ALTA USUARIO</button>
-<button>ALTA PRODUCTO U OFERTA</button>
-<button>ALTA PEDIDO</button>
-<button>ALTA EMPLEADO</button>
-<button>ALTA LOCAL</button>
-<button>VER PEDIDOS</button>
-<button>VER CLIENTES</button>
-<button>VER ESTADISTICAS</button>
+<div style="margin: 10px;margin:auto; display:block; width: 60%;">
+	</br></br>
+	<a class="btn btn-primary btn-block" ui-sref="main.altaUsuario" ng-if="usuario.perfil == 'Administrador'">ALTA USUARIO</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.productos">ALTA PRODUCTO U OFERTA</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.productos">ALTA PEDIDO</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.usuarios" ng-if="usuario.perfil == 'Encargado'">ALTA EMPLEADO</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.altaLocal" ng-if="usuario.perfil == 'Administrador'">ALTA LOCAL</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.productos">VER PEDIDOS</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.productos">VER CLIENTES</a>
+	<a class="btn btn-primary btn-block" ui-sref="main.usuarios" ng-if="usuario.perfil == 'Administrador'">VER ESTADISTICAS</a>
+	</br>
+
+	<button class="btn btn-danger btn-block" ng-click="Logout()">SALIR</button>	
+</div>

@@ -1,2 +1,27 @@
 <h3>Este es el main del sistema</h3>
-<div ui-view></div>
+<p style="text-align:center; background-color:lightblue; color: black"><strong>Bienvenido, {{usuario.nombre}} {{usuario.apellido}} ({{usuario.email}})</strong></p>
+
+<ul class="nav nav-pills">
+  <li role="presentation" class="active"><a ui-sref="main.menu">Home</a></li>
+  <li role="presentation" class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Altas <span class="caret"></span> </a>
+		<ul class="dropdown-menu">
+		  	<li role="presentation" ng-if="usuario.perfil == 'administrador'"><a ui-sref="main.altaUsuarios">Alta Usuario</a></li>
+		  	<li role="presentation" ng-if="usuario.perfil == 'administrador'"><a ui-sref="main.altaUsuarios">Alta Local</a></li>
+			<li role="presentation" ng-if="usuario.perfil != 'comprador'"><a ui-sref="encuesta">Alta Producto u Oferta</a></li>
+			<li role="presentation"><a ui-sref="encuesta">Alta Pedido</a></li>
+
+   		</ul>
+  </li>
+  <li role="presentation" class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Ver <span class="caret"></span> </a>
+		<ul class="dropdown-menu">
+			<li role="presentation" ng-if="usuario.perfil != 'comprador'"><a ui-sref="main.alta">Ver Pedidos</a></li>
+			<li role="presentation"><a ui-sref="main.productos">Ver Clientes</a></li>
+  			<li role="presentation" ng-if="usuario.perfil == 'administrador'"><a ui-sref="main.usuarios">Ver Estadísticas</a></li>
+   		</ul>
+  </li>
+</ul>
+
+</br>
+<div ui-view style="margin: 10px;margin:auto; display:block; width: 90%;"></div>
