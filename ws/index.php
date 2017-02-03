@@ -238,6 +238,20 @@
 		return $response;
 	});
 
+	$app->get("/locales", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de locales";
+
+		//Traigo todos los locales
+		require_once "clases/local.php";
+		$locales = Local::TraerTodosLosLocales();		
+		$respuesta["locales"] = $locales;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});	
+
 #PRODUCTOS
 	$app->post("/productos/{producto}", function($request, $response, $args){
 		//Recupero los datos del formulario de alta del producto en un stdClass

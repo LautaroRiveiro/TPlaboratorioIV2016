@@ -1,0 +1,6 @@
+<div class="row">
+    <div ng-repeat="local in locales" class="col-lg-4 col-sm-6 text-center">
+    <slider images="local.arrayImg"></slider>
+        <h3><a ui-sref="navbar.infoLocal({id:local.idLocal})"> {{local.direccion}}</a></h3>
+    </div>
+</div>

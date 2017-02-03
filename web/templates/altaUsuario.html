@@ -31,8 +31,8 @@
         <div class="form-group">
             <label class="control-label">Sexo</label>
             <br>
-            <label class="radio-inline"><input type="radio" name="sexo" value="M" ng-model="nuevo.sexo" required/>Masculino</label>
-            <label class="radio-inline"><input type="radio" name="sexo" value="F" ng-model="nuevo.sexo"/>Femenino</label>
+            <label class="radio-inline"><input type="radio" name="sexo" value="Masculino" ng-model="nuevo.sexo" required/>Masculino</label>
+            <label class="radio-inline"><input type="radio" name="sexo" value="Femenino" ng-model="nuevo.sexo"/>Femenino</label>
         </div>
 
         <!-- E MAIL -->
@@ -47,7 +47,8 @@
         </div>
 
       <!-- PASSWORD -->
-        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.clave.$dirty && formAlta.clave.$invalid, 'has-success has-feedback': formAlta.clave.$valid}">
+
+        <div ng-if="estado == 'alta'" class="form-group" ng-class="{'has-error has-feedback': formAlta.clave.$dirty && formAlta.clave.$invalid, 'has-success has-feedback': formAlta.clave.$valid}">
             <label for="clave" class="control-label">Clave</label>
             <input type="password" class="form-control" name="clave" id="clave" ng-model="nuevo.password" placeholder="Ingrese Clave" required minlength=4/>
             <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.clave.$dirty && formAlta.clave.$invalid, 'glyphicon-ok': formAlta.clave.$valid}"></span>
@@ -56,13 +57,14 @@
                 <small class="help-block" ng-show="formAlta.clave.$error.minlength">* Clave demasiado corta (mínimo 4 caracteres)</small>
             </span>
         </div>
-        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.confirmarClave.$dirty && formAlta.confirmarClave.$invalid || (nuevo.password != nuevo.confirmarClave), 'has-success has-feedback': formAlta.confirmarClave.$valid}">
+        <div ng-if="estado == 'alta'" class="form-group" ng-class="{'has-error has-feedback': formAlta.confirmarClave.$dirty && formAlta.confirmarClave.$invalid || (nuevo.password != nuevo.confirmarClave), 'has-success has-feedback': formAlta.confirmarClave.$valid}">
             <input type="password" class="form-control" name="confirmarClave" id="confirmarClave" ng-model="nuevo.confirmarClave" placeholder="Reingrese Clave" required minlength=4 ng-disabled="formAlta.clave.$invalid"/>
             <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.confirmarClave.$dirty && formAlta.confirmarClave.$invalid || (nuevo.password != nuevo.confirmarClave), 'glyphicon-ok': formAlta.confirmarClave.$valid}"></span>
             <small class="help-block" ng-show="formAlta.confirmarClave.$dirty && (nuevo.password != nuevo.confirmarClave)">Las claves no coinciden</small>
         </div>
       
-      <button class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid || (nuevo.password != nuevo.confirmarClave)"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</button>
+      <button ng-if="estado == 'alta'" class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid || (nuevo.password != nuevo.confirmarClave)"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</button>
+      <button ng-if="estado == 'modificacion'" class="btn btn-info " name="guardar" ng-click="Modificar()" ng-disabled="formAlta.$invalid"><span class="glyphicon glyphicon-save">&nbsp;</span>MODIFICAR</button>
 
     </form>
 </div>

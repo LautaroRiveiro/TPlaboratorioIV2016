@@ -6,20 +6,43 @@ angular.module('starter.controllers', [])
 	console.info("usuario", $scope.usuario)
 })
 
-.controller('altaUsuarioCtrl', function($scope, $auth, $http){
+.controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state){
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
 	console.info("usuario", $scope.usuario);
-
+	console.info("$stateParams",$stateParams);
+	
 	//Objeto para el nuevo usuario
 	$scope.nuevo = {}
-	$scope.nuevo.nombre = "Prueba";
-	$scope.nuevo.apellido = "Test";
-	$scope.nuevo.email = "@prueba.com";
-	$scope.nuevo.sexo = "M";
-	$scope.nuevo.password = "1234";
-	$scope.nuevo.confirmarClave = "1234";
+	if($stateParams.obj == null){
+		$scope.estado = "alta";
+		$scope.nuevo.nombre = "Prueba";
+		$scope.nuevo.apellido = "Test";
+		$scope.nuevo.email = "@prueba.com";
+		$scope.nuevo.sexo = "Masculino";
+		$scope.nuevo.password = "1234";
+		$scope.nuevo.confirmarClave = "1234";	
+	}
+	else
+	{
+		$scope.estado = "modificacion";
+		$scope.nuevo = $stateParams;
+		console.info("$stateParams",$stateParams.obj);
+		$scope.nuevo.id = $stateParams.obj.id;
+		$scope.nuevo.nombre = $stateParams.obj.nombre;
+		$scope.nuevo.apellido = $stateParams.obj.apellido;
+		$scope.nuevo.email = $stateParams.obj.email;
+		/*if ($stateParams.obj.sexo == "Masculino"){
+			$scope.nuevo.sexo = "M";
+		}
+		else{
+			$scope.nuevo.sexo = "F";
+		}*/
+		$scope.nuevo.sexo = $stateParams.obj.sexo;
+		$scope.nuevo.perfil = $stateParams.obj.perfil;
+	}
+
 
 	//Guardar el usuario en la base de datos
 	$scope.Guardar = function(){
@@ -30,6 +53,21 @@ angular.module('starter.controllers', [])
 			for (var campo in $scope.nuevo) {
 			    $scope.nuevo[campo] = "";
 			}
+		}, function(error){
+			console.info("Error: ", error);
+		});
+	}
+
+	//Modificar el usuario en la base de datos
+	$scope.Modificar = function(){
+		$http.put("http://localhost/TPlaboratorioIV2016/ws/usuarios/"+JSON.stringify($scope.nuevo))
+		.then(function(data){
+			console.info("Datos: ", data);
+			alert("Modificación realizada con éxito");
+			for (var campo in $scope.nuevo) {
+			    $scope.nuevo[campo] = "";
+			}
+			$state.go("main.grillaUsuarios");
 		}, function(error){
 			console.info("Error: ", error);
 		});
@@ -186,4 +224,60 @@ angular.module('starter.controllers', [])
 			console.info("Error: ", error);
 		});
 	}
+})
+
+.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state){
+
+	$scope.gridOptions = {};
+
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/usuarios")
+	.then(function(data){
+		console.info(data.data);
+		$scope.gridOptions.data = data.data.usuarios
+		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
+	$scope.gridOptions.columnDefs = columUsuarios();
+	function columUsuarios () {
+        return [
+            { field: 'nombre', name: 'nombre'},
+            { field: 'apellido', name: 'apellido'},
+            { field: 'email', name: 'email'},
+            { field: 'perfil', name: 'perfil'},
+            { field: 'Boton', width: '90', displayName: 'Boton', cellTemplate:"<button class='btn btn-info btn-block btn-sm' ng-click='grid.appScope.Modificar(row.entity)'>MODIFICAR</button>"}
+        ];
+    }
+    $scope.Modificar = function(row){
+      console.info(row);
+      //var dato=JSON.stringify(row);
+      $state.go('main.altaUsuario', {obj:row});
+    }
+})
+
+.controller('grillaLocalesCtrl',function($scope, $http){
+
+	$scope.locales = {};
+
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+	.then(function(data){
+		console.info(data.data);
+		$scope.locales = data.data.locales;
+		console.info($scope.locales);
+
+		for (var local in $scope.locales) {
+			    $scope.locales[local].foto1 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto1;
+			    $scope.locales[local].foto2 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto2;
+			    $scope.locales[local].foto3 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto3;
+			    $scope.locales[local].arrayImg = [$scope.locales[local].foto1, $scope.locales[local].foto2, $scope.locales[local].foto3];
+		}
+
+		console.info($scope.locales);
+
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
+    
 });

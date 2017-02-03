@@ -156,8 +156,8 @@ class Usuario
 		$conexion = self::CrearConexion();
 
 		$sql = "UPDATE usuarios
-				SET nombre = :nombre, apellido = :apellido, email = :email, sexo = :sexo, perfil = :perfil, password = :pass
-				WHERE id = :id";
+				SET nombre = :nombre, apellido = :apellido, email = :email, sexo = :sexo, perfil = :perfil
+				WHERE id = :id"; //, password = :pass
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":nombre", $usuario->nombre, PDO::PARAM_STR);
@@ -165,7 +165,7 @@ class Usuario
 		$consulta->bindValue(":email", $usuario->email, PDO::PARAM_STR);
 		$consulta->bindValue(":sexo", $usuario->sexo, PDO::PARAM_STR);
 		$consulta->bindValue(":perfil", $usuario->perfil, PDO::PARAM_STR);
-		$consulta->bindValue(":pass", $usuario->password, PDO::PARAM_STR);
+		//$consulta->bindValue(":pass", $usuario->password, PDO::PARAM_STR);
 		$consulta->bindValue(":id", $usuario->id, PDO::PARAM_INT);
 		$consulta->execute();
 

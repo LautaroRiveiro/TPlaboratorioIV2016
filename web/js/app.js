@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
@@ -29,7 +29,8 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         .state('main.altaUsuario', {
             url: '/altaUsuario',
             templateUrl: 'templates/altaUsuario.html',
-            controller: 'altaUsuarioCtrl'
+            controller: 'altaUsuarioCtrl',
+            params: {obj: null}
         })
         .state('main.altaLocal', {
             url: '/altaLocal',
@@ -40,6 +41,16 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             url: '/altaProducto',
             templateUrl: 'templates/altaProducto.html',
             controller: 'altaProductoCtrl'
+        })
+        .state('main.grillaUsuarios', {
+            url: '/grillaUsuarios',
+            templateUrl: 'templates/grillaUsuarios.html',
+            controller: 'grillaUsuariosCtrl'
+        })
+        .state('main.grillaLocales', {
+            url: '/grillaLocales',
+            templateUrl: 'templates/grillaLocales.html',
+            controller: 'grillaLocalesCtrl'
         })
         .state('encuesta', {
             url: '/encuesta',

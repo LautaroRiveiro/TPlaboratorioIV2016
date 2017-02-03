@@ -11,7 +11,7 @@ angular.module('login.controllers', [])
 	$scope.nuevo.nombre = "Prueba";
 	$scope.nuevo.apellido = "Test";
 	$scope.nuevo.email = "@prueba.com";
-	$scope.nuevo.sexo = "M";
+	$scope.nuevo.sexo = "Masculino";
 	$scope.nuevo.password = "1234";
 	$scope.nuevo.confirmarClave = "1234";
 
