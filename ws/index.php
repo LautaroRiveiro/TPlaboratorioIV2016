@@ -273,6 +273,50 @@
 		return $response;
 	});
 
+	$app->get("/productos", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de productos";
+
+		//Traigo todos los productos
+		require_once "clases/producto.php";
+		$productos = Producto::TraerTodosLosProductos();		
+		$respuesta["productos"] = $productos;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
+#OFERTAS
+	$app->post("/ofertas/{oferta}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del oferta en un stdClass
+		$oferta = json_decode($args["oferta"]); // $oferta->nombre = "Pizza"
+
+		//Modifico el oferta
+		try{
+			require_once "clases/oferta.php";
+			$respuesta["idAgregado"] = Oferta::Agregar($oferta);
+			$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
+			
+			require_once "clases/ofertas_prod.php";
+			foreach ($oferta->productos as $valor) {
+			    //$valor = $valor * 2;
+			    $respuesta[] = Oferta_prod::Agregar($respuesta["idAgregado"],$valor);
+			}
+			//$respuesta["idAgregado"] = Oferta::Agregar($oferta);
+			//$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+
 	//Correr la aplicación
 	$app->run();
  ?>

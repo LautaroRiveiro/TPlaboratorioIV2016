@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
@@ -41,6 +41,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             url: '/altaProducto',
             templateUrl: 'templates/altaProducto.html',
             controller: 'altaProductoCtrl'
+        })
+        .state('main.altaOferta', {
+            url: '/altaOferta',
+            templateUrl: 'templates/altaOferta.html',
+            controller: 'altaOfertaCtrl'
         })
         .state('main.grillaUsuarios', {
             url: '/grillaUsuarios',
