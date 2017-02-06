@@ -6,6 +6,12 @@ angular.module('starter.controllers', [])
 	console.info("usuario", $scope.usuario)
 })
 
+.controller('mainCtrl', function($scope, $auth){
+	$scope.usuario = {};
+	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
+	console.info("usuario main", $scope.usuario);
+})
+
 .controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state){
 	//Recupero datos de la sesión
 	$scope.usuario = {};

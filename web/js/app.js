@@ -15,7 +15,8 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         })
         .state('main', {
             url: '/main',
-            templateUrl: 'templates/main.html'
+            templateUrl: 'templates/main.html',
+            controller: 'mainCtrl'
         })
         .state('main.menu', {
             url: '/menu',
