@@ -1,0 +1,16 @@
+<div style="margin: 10px;margin:auto; display:block; width: 60%;">
+    <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
+
+      <!-- PRODUCTOS -->
+      <label class="control-label">Productos</label>
+      <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+
+      <!-- ENVIAR -->
+        <br>
+        <button class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid"><span class="glyphicon glyphicon-send">&nbsp;</span>ENVIAR</button>
+        
+      <!-- VOLVER -->
+        <a ui-sref="main.menu" class="btn btn-info "><span class="glyphicon glyphicon-repeat">&nbsp;</span>VOLVER</a>
+
+    </form>
+</div>

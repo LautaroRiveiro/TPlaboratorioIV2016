@@ -40,6 +40,7 @@
 			$key = "123456";
 			//Creo el token que voy a codificar
 			$token = array(
+			    "id" => $usuarioLogueado->id,
 			    "nombre" => $usuarioLogueado->nombre,
 			    "perfil" => $usuarioLogueado->perfil,
 			    "email" => $usuarioLogueado->email,
@@ -316,6 +317,35 @@
 		return $response;
 	});
 
+
+#PEDIDOS
+	$app->post("/pedidos/{pedido}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del pedido en un stdClass
+		$pedido = json_decode($args["pedido"]); // $pedido->nombre = "Pizza"
+
+		//Modifico el pedido
+		try{
+			require_once "clases/pedido.php";
+			$respuesta["idAgregado"] = Pedido::Agregar($pedido);
+			$respuesta["mensaje"] = "Se agregó el pedido #".$respuesta["idAgregado"];
+			
+			require_once "clases/pedidos_detalle.php";
+			foreach ($pedido->productos as $valor) {
+			    //$valor = $valor * 2;
+			    $respuesta[] = Pedido_detalle::Agregar($respuesta["idAgregado"],$valor);
+			}
+			//$respuesta["idAgregado"] = Oferta::Agregar($oferta);
+			//$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
 
 	//Correr la aplicación
 	$app->run();

@@ -47,6 +47,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             templateUrl: 'templates/altaOferta.html',
             controller: 'altaOfertaCtrl'
         })
+        .state('main.altaPedido', {
+            url: '/altaPedido',
+            templateUrl: 'templates/altaPedido.html',
+            controller: 'altaPedidoCtrl'
+        })
         .state('main.grillaUsuarios', {
             url: '/grillaUsuarios',
             templateUrl: 'templates/grillaUsuarios.html',

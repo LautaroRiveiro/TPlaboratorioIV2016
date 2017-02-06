@@ -295,6 +295,138 @@ angular.module('starter.controllers', [])
     }
 })
 
+
+
+
+
+
+
+
+
+
+
+
+.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants){
+	$scope.nuevo = {};
+	$scope.nuevo.id_usuario = $auth.getPayload().id;
+	$scope.nuevo.importe = 0;
+
+	$scope.gridOptions = {
+		enableRowSelection: true,
+    	//enableFullRowSelection: true,
+    	//multiSelect: true
+	};
+
+	$scope.gridOptions.onRegisterApi = function(gridApi) {
+	    $scope.myGridApi = gridApi;
+		$scope.myGridApi.selection.on.rowSelectionChanged($scope, function (row) {
+		    if (row.isSelected){
+		    	row.entity.cantidad = 1;
+		    }
+		    else{
+		    	row.entity.cantidad = null;
+		    }
+		    if (!this.grid.appScope.buttonClicked) {
+		        //alert(row.isSelected);
+		    }
+		    this.grid.appScope.buttonClicked = false;
+		});
+	};
+
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
+	.then(function(data){
+		console.info(data.data);
+		$scope.gridOptions.data = data.data.productos
+		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+		console.info("$scope.gridOptions",$scope.gridOptions);
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
+
+	$scope.gridOptions.columnDefs = columProductos();
+	function columProductos () {
+        return [
+            { field: 'descripcion', name: 'descripcion'},
+            { field: 'precio', width: '80', name: 'precio', cellFilter: 'currency'},
+            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
+            { field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' }
+        ];
+    }
+
+    $scope.Modificar = function(row){
+      console.info(row);
+      $scope.myGridApi.selection.getSelectedRows();
+      console.info("$scope.myGridApi.selection.getSelectedRows()",$scope.myGridApi.selection.getSelectedRows());
+      //var dato=JSON.stringify(row);
+      //$state.go('main.altaUsuario', {obj:row});
+      var f = new Date();
+	  console.info(f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear());
+	  console.info(f);
+    }
+
+    $scope.Guardar = function(){
+        $scope.nuevo.fecha =  new Date();
+        $scope.nuevo.id_local =  1;
+        console.info("Id usuario: ",$scope.nuevo.id_usuario);
+        console.info("Fecha: ",$scope.nuevo.fecha);
+        console.info("Productos: ",$scope.myGridApi.selection.getSelectedRows());
+
+        $scope.nuevo.productos = [];
+        var arrayAux = $scope.myGridApi.selection.getSelectedRows();
+        for (var producto in arrayAux) {
+			//$scope.nuevo.productos.push(arrayAux[producto]);
+			$scope.nuevo.productos[producto] = {};
+			$scope.nuevo.productos[producto].id = arrayAux[producto].id;
+			$scope.nuevo.productos[producto].cantidad = arrayAux[producto].cantidad;
+			console.info("prod: ",$scope.nuevo.productos);
+			$scope.nuevo.importe += parseInt(arrayAux[producto].precio)*parseInt(arrayAux[producto].cantidad);
+		}
+
+		if($scope.nuevo.productos.length == 0){
+			alert("Por favor, selecciona al menos un producto");
+			return;
+		}
+
+		console.info("LO QUE SE VA A MANDAR POR POST:",$scope.nuevo);
+
+        $http.post("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify($scope.nuevo))
+		.then(function(data){
+			console.info("Datos: ", data);
+			alert("Alta realizada con éxito");
+			for (var campo in $scope.nuevo.productos) {
+			    $scope.nuevo.productos[campo] = null;
+			}
+			$scope.nuevo.importe = 0;
+			console.info("Datos borrados: ", $scope.nuevo);
+			//$scope.myGridApi.selection.clearSelectedRows();
+		}, function(error){
+			console.info("Error: ", error);
+		});
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state){
 
 	$scope.gridOptions = {};
