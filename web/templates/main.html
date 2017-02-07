@@ -18,8 +18,8 @@
         <li role="presentation"  class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Altas <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a ui-sref="main.altaUsuarios">Alta Usuario</a></li>
-            <li><a ui-sref="main.altaLocal">Alta Local</a></li>
+            <li ng-if="usuario.perfil == 'Administrador'"><a ui-sref="main.altaUsuario">Alta Usuario</a></li>
+            <li ng-if="usuario.perfil == 'Administrador'"><a ui-sref="main.altaLocal">Alta Local</a></li>
             <li><a ui-sref="main.altaProducto">Alta Producto</a></li>
             <li><a ui-sref="main.altaOferta">Alta Oferta</a></li>
             <!-- <li class="divider"></li> -->

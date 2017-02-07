@@ -31,7 +31,7 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             url: '/altaUsuario',
             templateUrl: 'templates/altaUsuario.html',
             controller: 'altaUsuarioCtrl',
-            params: {obj: null}
+            params: {obj: null, encargado: false}
         })
         .state('main.altaLocal', {
             url: '/altaLocal',
@@ -56,12 +56,20 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         .state('main.grillaUsuarios', {
             url: '/grillaUsuarios',
             templateUrl: 'templates/grillaUsuarios.html',
-            controller: 'grillaUsuariosCtrl'
+            controller: 'grillaUsuariosCtrl',
+            params: {
+                encargado: false
+            }
         })
         .state('main.grillaLocales', {
             url: '/grillaLocales',
             templateUrl: 'templates/grillaLocales.html',
             controller: 'grillaLocalesCtrl'
+        })
+        .state('main.grillaPedidos', {
+            url: '/grillaPedidos',
+            templateUrl: 'templates/grillaPedidos.html',
+            controller: 'grillaPedidosCtrl'
         })
         .state('encuesta', {
             url: '/encuesta',

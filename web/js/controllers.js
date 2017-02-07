@@ -18,6 +18,8 @@ angular.module('starter.controllers', [])
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
 	console.info("usuario", $scope.usuario);
 	console.info("$stateParams",$stateParams);
+	$scope.encargado = {};
+	$scope.encargado.encargado = $stateParams.encargado;
 	
 	//Objeto para el nuevo usuario
 	$scope.nuevo = {}
@@ -72,8 +74,14 @@ angular.module('starter.controllers', [])
 			alert("Modificación realizada con éxito");
 			for (var campo in $scope.nuevo) {
 			    $scope.nuevo[campo] = "";
+			};
+			
+			if ($scope.encargado.encargado){
+				$state.go("main.grillaUsuarios", {encargado: true});
 			}
-			$state.go("main.grillaUsuarios");
+			else{
+				$state.go("main.grillaUsuarios");
+			}
 		}, function(error){
 			console.info("Error: ", error);
 		});
@@ -301,17 +309,6 @@ angular.module('starter.controllers', [])
     }
 })
 
-
-
-
-
-
-
-
-
-
-
-
 .controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants){
 	$scope.nuevo = {};
 	$scope.nuevo.id_usuario = $auth.getPayload().id;
@@ -412,35 +409,32 @@ angular.module('starter.controllers', [])
     }
 })
 
+.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state){
+	console.info("$stateParams",$stateParams);
+	if ($stateParams.encargado) {
+		$scope.titulo = "Empleados";
+	}
+	else{
+		$scope.titulo = "Usuarios";
+	}
 
 	$scope.gridOptions = {};
 
 	$http.get("http://localhost/TPlaboratorioIV2016/ws/usuarios")
 	.then(function(data){
-		console.info(data.data);
-		$scope.gridOptions.data = data.data.usuarios
+		console.info("data.data", data.data);
+
+		if ($stateParams.encargado) {
+			for(var usuario in data.data.usuarios){
+				if (data.data.usuarios[usuario].perfil = "Empleado") {
+					$scope.gridOptions.data.push(data.data.usuarios[usuario]);
+				}
+			}
+		}
+		else{
+			$scope.gridOptions.data = data.data.usuarios
+		}
 		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
 	}, function(error){
 		console.info("Error: ", error);
@@ -459,9 +453,70 @@ angular.module('starter.controllers', [])
     $scope.Modificar = function(row){
       console.info(row);
       //var dato=JSON.stringify(row);
-      $state.go('main.altaUsuario', {obj:row});
+      if ($stateParams.encargado) {
+      	  $state.go('main.altaUsuario', {obj:row, encargado: true});
+      }
+      else{
+      	  $state.go('main.altaUsuario', {obj:row});
+      }
+      
     }
 })
+
+.controller('grillaPedidosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams){
+
+	$scope.gridOptions = {};
+
+	$( "#estadoPedido" ).on( "change", function() {
+	  console.log( $( this ).text() );
+	});
+
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/pedidos")
+	.then(function(data){
+		console.info("data.data", data.data);
+
+		if ($stateParams.encargado) {
+			for(var pedido in data.data.pedidos){
+				if (data.data.pedidos[pedido].perfil = "Empleado") {
+					$scope.gridOptions.data.push(data.data.pedidos[pedido]);
+				}
+			}
+		}
+		else{
+			$scope.gridOptions.data = data.data.pedidos
+		}
+		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
+	$scope.gridOptions.columnDefs = columUsuarios();
+	function columUsuarios () {
+        return [
+            { field: 'id', name: 'Nº Pedido', width: '90'},
+            { field: 'usuario', name: 'Cliente', cellTemplate:"<span>&nbsp;{{row.entity.usuario.apellido}}, {{row.entity.usuario.nombre}}</span>"},
+            { field: 'fecha', name: 'fecha', width: '150', cellFilter:'date:\'dd/MM/yyyy - HH:mm\''},
+            { field: 'importe', name: 'importe', width: '90', cellFilter:'currency'},
+            { field: 'estado', name: 'estado', width: '90'},
+            { field: 'nuevoEstado', width: '140', name: 'Nuevo Estado', cellTemplate:"<select ng-model='row.entity.nuevoEstado'><option disabled selected value> -- nuevo estado -- </option><option value='Pedido'>Pedido</option><option value='Entregado'>Entregado</option><option value='Cancelado'>Cancelado</option></select>"},
+            { field: 'Boton', width: '90', displayName: 'Boton', cellTemplate:"<button class='btn btn-info btn-block btn-sm' ng-click='grid.appScope.Modificar(row.entity)'>MODIFICAR</button>"}
+        ];
+    }
+    $scope.Modificar = function(row){
+      console.info("row",row);
+      $http.put("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify(row))
+      .then(function(data){
+		console.info("data.data", data.data);
+		$state.reload();
+		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+	}, function(error){
+		console.info("Error: ", error);
+	});
+    }
+})
+
+
+
 
 .controller('grillaLocalesCtrl',function($scope, $http){
 

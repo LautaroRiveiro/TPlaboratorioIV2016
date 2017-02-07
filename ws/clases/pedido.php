@@ -8,6 +8,7 @@ class Pedido
 	public $id_local;
  	public $fecha;
  	public $importe;
+ 	public $estado;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -32,6 +33,10 @@ class Pedido
 	{
 		return $this->importe;
 	}
+	public function GetEstado()
+	{
+		return $this->estado;
+	}
 
 
 	public function SetId($valor)
@@ -54,6 +59,10 @@ class Pedido
 	{
 		$this->importe = $valor;
 	}
+	public function SetEstado($valor)
+	{
+		$this->estado = $valor;
+	}
 
 
 //--------------------------------------------------------------------------------//
@@ -67,6 +76,7 @@ class Pedido
 			$this->id_usuario = $obj->GetIdUsuario();
 			$this->fecha = $obj->GetFecha();
 			$this->importe = $obj->GetImporte();
+			$this->estado = $obj->GetEstado();
 		}
 	}
 
@@ -76,7 +86,7 @@ class Pedido
 	public static function TraerUnPedidoPorId($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_usuario, U.id_local, U.fecha, U.importe
+		$sql = "SELECT U.id, U.id_usuario, U.id_local, U.fecha, U.importe, U.estado
 				FROM pedidos U
 				WHERE U.id = :id";
 
@@ -91,7 +101,7 @@ class Pedido
 	public static function TraerTodosLosPedidos(){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_usuario, U.id_local, U.fecha, U.importe
+		$sql = "SELECT U.id, U.id_usuario, U.id_local, U.fecha, U.importe, U.estado
 				FROM pedidos U";
 
 		$consulta = $conexion->prepare($sql);
@@ -104,14 +114,15 @@ class Pedido
 	public static function Agregar($pedido){
 		$conexion = self::CrearConexion();
 
-		$sql = "INSERT INTO pedidos (id_usuario, id_local, fecha, importe)
-				VALUES (:id_usuario, :id_local, :fecha, :importe)";
+		$sql = "INSERT INTO pedidos (id_usuario, id_local, fecha, importe, estado)
+				VALUES (:id_usuario, :id_local, :fecha, :importe, :estado)";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id_usuario", $pedido->id_usuario, PDO::PARAM_INT);
 		$consulta->bindValue(":id_local", $pedido->id_local, PDO::PARAM_INT);
 		$consulta->bindValue(":fecha", $pedido->fecha, PDO::PARAM_STR);
 		$consulta->bindValue(":importe", $pedido->importe, PDO::PARAM_INT);
+		$consulta->bindValue(":estado", $pedido->estado, PDO::PARAM_STR);
 		$consulta->execute();
 
 		$idAgregado = $conexion->lastInsertId();
@@ -122,7 +133,7 @@ class Pedido
 		$conexion = self::CrearConexion();
 
 		$sql = "UPDATE pedidos
-				SET id_usuario = :id_usuario, id_local = :id_local, fecha = :fecha, importe = :importe
+				SET id_usuario = :id_usuario, id_local = :id_local, fecha = :fecha, importe = :importe, estado = :estado
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
@@ -130,6 +141,23 @@ class Pedido
 		$consulta->bindValue(":id_local", $pedido->id_local, PDO::PARAM_INT);
 		$consulta->bindValue(":fecha", $pedido->fecha, PDO::PARAM_STR);
 		$consulta->bindValue(":importe", $pedido->importe, PDO::PARAM_INT);
+		$consulta->bindValue(":estado", $pedido->estado, PDO::PARAM_STR);
+		$consulta->bindValue(":id", $pedido->id, PDO::PARAM_INT);
+		$consulta->execute();
+
+		$cantidad = $consulta->rowCount();
+		return $cantidad;
+	}
+
+	public static function ModificarEstado($pedido){
+		$conexion = self::CrearConexion();
+
+		$sql = "UPDATE pedidos
+				SET estado = :estado
+				WHERE id = :id";
+
+		$consulta = $conexion->prepare($sql);
+		$consulta->bindValue(":estado", $pedido->nuevoEstado, PDO::PARAM_STR);
 		$consulta->bindValue(":id", $pedido->id, PDO::PARAM_INT);
 		$consulta->execute();
 

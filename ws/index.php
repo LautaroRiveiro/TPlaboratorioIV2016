@@ -347,6 +347,48 @@
 		return $response;
 	});
 
+	$app->get("/pedidos", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de pedidos";
+
+		//Traigo todos los pedidos
+		require_once "clases/pedido.php";
+		$pedidos = Pedido::TraerTodosLosPedidos();
+
+		require_once "clases/usuario.php";
+		foreach ($pedidos as $valor) {
+			    //$valor = $valor * 2;
+			    $valor->usuario = Usuario::TraerUnUsuarioPorId($valor->id);;
+			}
+
+		$respuesta["pedidos"] = $pedidos;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
+	$app->put("/pedidos/{pedido}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del pedido en un stdClass
+		$pedido = json_decode($args["pedido"]); // $pedido->nombre = "Pizza"
+
+
+		//Modifico el pedido
+		try{
+			require_once "clases/pedido.php";
+			$respuesta["cantidad"] = Pedido::ModificarEstado($pedido);
+			$respuesta["mensaje"] = "Se modificaron ".$respuesta["cantidad"]." pedidos";
+		}
+		catch (Exception $e){
+			$respuesta["nuevoId"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
 	//Correr la aplicación
 	$app->run();
  ?>

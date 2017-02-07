@@ -17,7 +17,7 @@
         </div>
 
         <!-- PERFIL -->
-        <div class="form-group">
+        <div class="form-group" ng-if="!encargado.encargado">
             <label class="control-label">Perfil</label>
             <br>
             <select class="form-control" name="perfil" ng-model="nuevo.perfil" required>
