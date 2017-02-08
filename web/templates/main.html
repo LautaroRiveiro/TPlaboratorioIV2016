@@ -41,9 +41,9 @@
         </li>
 
         <li><a ui-sref="main.estadisticas" ng-if="usuario.perfil == 'Administrador'">Estadísticas</a></li>
-        <li><a ui-sref="main.estadisticas" ng-if="usuario.perfil == 'Cliente'">Pedido</a></li>
+        <li><a ui-sref="main.altaPedido({perfil:'cliente'})" ng-if="usuario.perfil == 'Cliente'">Pedido</a></li>
         <li><a ui-sref="main.altaReserva" ng-if="usuario.perfil == 'Cliente'">Reserva</a></li>
-        <li><a ui-sref="main.estadisticas" ng-if="usuario.perfil == 'Cliente'">Evento</a></li>
+        <li><a ui-sref="main.altaEvento" ng-if="usuario.perfil == 'Cliente'">Evento</a></li>
       </ul>
 <!--       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">

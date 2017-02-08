@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'encuesta.controller', 'login.controllers', 'starter.controllers', 'cliente.controllers']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'ui.grid.autoResize', 'encuesta.controller', 'login.controllers', 'starter.controllers', 'cliente.controllers', 'estadisticas.controller', 'locales.controller']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
@@ -12,6 +12,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         	url: '/login',
         	templateUrl: 'templates/login.html',
             controller: 'loginCtrl'
+        })
+        .state('locales', {
+            url: '/locales',
+            templateUrl: 'templates/locales.html',
+            controller: 'localesCtrl'
         })
         .state('main', {
             url: '/main',

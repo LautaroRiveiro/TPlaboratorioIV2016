@@ -5,6 +5,7 @@ class Local
 //--ATRIBUTOS (No sé por qué tuve que ponerlos public)
 	public $id;
  	public $direccion;
+ 	public $cp;
   	public $foto1;
   	public $foto2;
   	public $foto3;
@@ -19,6 +20,10 @@ class Local
 	public function GetDireccion()
 	{
 		return $this->direccion;
+	}
+	public function GetCp()
+	{
+		return $this->cp;
 	}
 	public function GetFoto1()
 	{
@@ -42,6 +47,10 @@ class Local
 	{
 		$this->direccion = $valor;
 	}
+	public function SetCp($valor)
+	{
+		$this->cp = $valor;
+	}
 	public function SetFoto1($valor)
 	{
 		$this->foto1 = $valor;
@@ -64,6 +73,7 @@ class Local
 			$obj = self::TraerUnLocalPorId($id);
 			$this->id = $obj->GetId();
 			$this->direccion = $obj->GetDireccion();
+			$this->cp = $obj->GetCp();
 			$this->foto1 = $obj->GetFoto1();
 			$this->foto2 = $obj->GetFoto2();
 			$this->foto3 = $obj->GetFoto3();
@@ -82,7 +92,7 @@ class Local
 	public static function TraerUnLocalPorId($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.direccion, U.foto1, U.foto2, U.foto3
+		$sql = "SELECT U.id, U.direccion, U.cp, U.foto1, U.foto2, U.foto3
 				FROM locales U
 				WHERE U.id = :id";
 
@@ -97,7 +107,7 @@ class Local
 	public static function TraerTodosLosLocales(){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.direccion, U.foto1, U.foto2, U.foto3
+		$sql = "SELECT U.id, U.direccion, U.cp, U.foto1, U.foto2, U.foto3
 				FROM locales U";
 
 		$consulta = $conexion->prepare($sql);
@@ -110,11 +120,12 @@ class Local
 	public static function Agregar($local){
 		$conexion = self::CrearConexion();
 
-		$sql = "INSERT INTO locales (direccion, foto1, foto2, foto3)
-				VALUES (:direccion, :foto1, :foto2, :foto3)";
+		$sql = "INSERT INTO locales (direccion, cp, foto1, foto2, foto3)
+				VALUES (:direccion, :cp, :foto1, :foto2, :foto3)";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":direccion", $local->direccion, PDO::PARAM_STR);
+		$consulta->bindValue(":cp", $local->cp, PDO::PARAM_STR);
 		$consulta->bindValue(":foto1", $local->foto1, PDO::PARAM_STR);
 		$consulta->bindValue(":foto2", $local->foto2, PDO::PARAM_STR);
 		$consulta->bindValue(":foto3", $local->foto3, PDO::PARAM_STR);
@@ -128,11 +139,12 @@ class Local
 		$conexion = self::CrearConexion();
 
 		$sql = "UPDATE locales
-				SET direccion = :direccion, foto1 = :foto1, foto2 = :foto2, foto3 = :foto3
+				SET direccion = :direccion, cp = :cp, foto1 = :foto1, foto2 = :foto2, foto3 = :foto3
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":direccion", $local->direccion, PDO::PARAM_STR);
+		$consulta->bindValue(":cp", $local->cp, PDO::PARAM_STR);
 		$consulta->bindValue(":foto1", $local->foto1, PDO::PARAM_STR);
 		$consulta->bindValue(":foto2", $local->foto2, PDO::PARAM_STR);
 		$consulta->bindValue(":foto3", $local->foto3, PDO::PARAM_STR);

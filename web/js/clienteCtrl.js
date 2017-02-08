@@ -1,5 +1,18 @@
 angular.module('cliente.controllers',[])
 
+
+.controller('clienteCtrl', function($scope, $auth){
+	$('.carousel').carousel();
+
+	$scope.usuario = {};
+	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
+	console.info("usuario main", $scope.usuario);
+
+	$scope.saludar = function(){
+		alert("HOLA");
+	}
+})
+
 .controller('altaReservaCtrl', function($scope, $http, $auth, $state){
 	//Recupero los datos de la sesión del usuario
 	$scope.usuario = {};
@@ -76,6 +89,8 @@ angular.module('cliente.controllers',[])
 		enableRowSelection: true,
     	//enableFullRowSelection: true,
     	//multiSelect: true
+    	enableHorizontalScrollbar: 0,
+    	enableVerticalScrollbar: 0
 	};
 
 	$scope.gridOptions.onRegisterApi = function(gridApi) {
@@ -110,8 +125,9 @@ angular.module('cliente.controllers',[])
         return [
             { field: 'descripcion', name: 'descripcion'},
             { field: 'precio', width: '80', name: 'precio', cellFilter: 'currency'},
-            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
-            { field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' }
+            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' style='height:100%;' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
+            //{ field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' }
+            { field: 'Boton', width: '90', displayName: 'Boton', cellTemplate:"<button href='#detalle' data-toggle='modal' class='btn btn-info btn-block btn-sm' ng-click='grid.appScope.Detalle(row.entity)'>DETALLE</button>"}
         ];
     }
 
@@ -124,6 +140,15 @@ angular.module('cliente.controllers',[])
       var f = new Date();
 	  console.info(f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear());
 	  console.info(f);
+    }
+    
+    $scope.Detalle = function(row){
+		$scope.detalle = row;
+		console.info("$scope.detalle",$scope.detalle);
+		//$('.carousel').carousel('stop');
+		$('.carousel').carousel({
+			interval: 2000
+		});
     }
 
     $scope.Guardar = function(){

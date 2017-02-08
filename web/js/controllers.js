@@ -30,17 +30,6 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('clienteCtrl', function($scope, $auth){
-	$('.carousel').carousel();
-
-	$scope.usuario = {};
-	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
-	console.info("usuario main", $scope.usuario);
-
-	$scope.saludar = function(){
-		alert("HOLA");
-	}
-})
 
 .controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state){
 	//Recupero datos de la sesión
@@ -351,6 +340,9 @@ angular.module('starter.controllers', [])
 		enableRowSelection: true,
     	//enableFullRowSelection: true,
     	//multiSelect: true
+    	//rowHeight: 50
+    	enableHorizontalScrollbar: 0,
+    	enableVerticalScrollbar: 0
 	};
 
 	$scope.gridOptions.onRegisterApi = function(gridApi) {
@@ -380,15 +372,34 @@ angular.module('starter.controllers', [])
 	});
 
 
+	$scope.locales = {};
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+	.then(function(data){
+		console.info("data.data", data.data);
+		$scope.locales.locales = data.data.locales;
+	}
+	,function(error){
+		console.info("Error: ", error);
+	});
+
+
+
+
+
 	$scope.gridOptions.columnDefs = columProductos();
 	function columProductos () {
         return [
             { field: 'descripcion', name: 'descripcion'},
             { field: 'precio', width: '80', name: 'precio', cellFilter: 'currency'},
-            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
-            { field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' }
+            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' style='height:100%;' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
+            //{ field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' },
+            //{ field: 'foto1', name: 'avatar', cellTemplate:"<img width=\"30px\" ng-src=\"../ws/img/{{grid.getCellValue(row, col)}}\" lazy-src>"},
+        	//{ field: 'foto1', name: 'Foto', cellTemplate:"<img height='100%' width='100%' ng-src=\"../ws/img/{{grid.getCellValue(row, col)}}\" lazy-src>"},
+            { field: 'Boton', width: '90', displayName: 'Detalle', cellTemplate:"<button href='#detalle' data-toggle='modal' class='btn btn-info btn-block btn-sm' ng-click='grid.appScope.Detalle(row.entity)'>VER</button>"}
         ];
     }
+
+
 
     $scope.Modificar = function(row){
       console.info(row);
@@ -401,9 +412,23 @@ angular.module('starter.controllers', [])
 	  console.info(f);
     }
 
+    $scope.Detalle = function(row){
+		$scope.detalle = row;
+		console.info("$scope.detalle",$scope.detalle);
+		//$('.carousel').carousel('stop');
+		$('.carousel').carousel({
+			interval: 2000
+		});
+    }
+
     $scope.Guardar = function(){
         $scope.nuevo.fecha =  new Date();
-        $scope.nuevo.id_local =  1;
+        
+        if ($scope.nuevo.id_local == undefined) {
+			alert("Por favor, selecciona un local");
+			return;
+        }
+
         console.info("Id usuario: ",$scope.nuevo.id_usuario);
         console.info("Fecha: ",$scope.nuevo.fecha);
         console.info("Productos: ",$scope.myGridApi.selection.getSelectedRows());

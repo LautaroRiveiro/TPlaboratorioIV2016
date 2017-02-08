@@ -1,5 +1,16 @@
+<link rel="stylesheet" href="css/pedidos.css">
+
 <div style="margin: 10px;margin:auto; display:block; width: 60%;">
     <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
+
+      <!-- LOCAL -->
+      <label class="control-label">Local</label>
+      <ul style="text-align: center;margin: auto;">
+        <li ng-repeat="(key, value) in locales.locales" style="text-align: center;margin: auto;"><input type="radio" id="cb{{key}}" name="local" ng-model="nuevo.id_local" ng-value="{{value.id}}"/>
+          <label class="radiolabel" for="cb{{key}}"><img ng-src="../ws/img/{{value.foto1}}" /></label>
+          <span style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">{{value.direccion}}</span>
+        </li>
+      </ul>
 
       <!-- PRODUCTOS -->
       <label class="control-label">Productos</label>
@@ -15,3 +26,48 @@
 
     </form>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="detalle">
+  <div class="modal-dialog  modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{detalle.descripcion}}  -  {{detalle.precio | currency}}</h4>
+      </div>
+      <div class="modal-body">
+          <div class="container" style="text-align: center; margin: auto; width: 100%">
+              <div id="carousel-1" class="carousel slide" data-ride="carousel" data-pause=null  style="text-align: center; margin: auto;">
+                  <!-- indicadores (puntitos) -->
+                <!-- <ol class="carousel-indicators">
+                      <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+                      <li data-target="#carousel-1" data-slide-to="1"></li>
+                      <li data-target="#carousel-1" data-slide-to="2"></li>
+                  </ol> -->
+                  <!-- contenedor -->
+                  <div class="carousel-inner" role="listbox">
+                      <div class="item active">
+                          <img ng-src="../ws/img/{{detalle.foto1}}" alt="" class="img-rounded img-responsive">
+                      </div>
+                      <div class="item">
+                          <img ng-src="../ws/img/{{detalle.foto2}}" alt="" class="img-rounded img-responsive">
+                      </div>
+                      <div class="item">
+                          <img ng-src="../ws/img/{{detalle.foto3}}" alt="" class="img-rounded img-responsive">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<style>
+.ui-grid .ui-grid-render-container-body .ui-grid-viewport {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+</style>
