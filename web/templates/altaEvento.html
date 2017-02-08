@@ -4,6 +4,15 @@
       <!-- PRODUCTOS -->
       <label class="control-label">Productos</label>
       <div id="grid1" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+      <br>
+      
+      <!-- FECHA -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.fecha.$dirty && formAlta.fecha.$invalid, 'has-success has-feedback': formAlta.fecha.$valid}">
+            <label for="fecha" class="control-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" id="fecha" min="2017-01-01" ng-model="nuevo.fecha" placeholder="Ingrese Fecha" required/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.fecha.$dirty && formAlta.fecha.$invalid, 'glyphicon-ok': formAlta.fecha.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.fecha.$dirty && formAlta.fecha.$invalid">* Este campo es obligatorio</small>
+        </div>
 
       <!-- ENVIAR -->
         <br>

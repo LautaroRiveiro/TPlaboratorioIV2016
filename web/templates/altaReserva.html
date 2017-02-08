@@ -1,0 +1,47 @@
+<div style="margin: 10px;margin:auto; display:block; width: 60%;">
+    <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
+
+      <!-- LOCAL -->
+      <div class="form-group" ng-class="{'has-error has-feedback': formAlta.local.$dirty && formAlta.local.$invalid, 'has-success has-feedback': formAlta.local.$valid}">
+          <label for="local" class="control-label">Local</label>
+          <br>
+          <select class="form-control" name="local" ng-model="nuevo.id_local" required>
+              <option value="{{value.id}}" ng-repeat="(key, value) in locales.locales">Local de {{value.direccion}}</option>
+          </select>
+          <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.local.$dirty && formAlta.local.$invalid, 'glyphicon-ok': formAlta.local.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.local.$dirty && formAlta.local.$invalid">* Este campo es obligatorio</small>
+      </div>
+
+      <!-- FECHA -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.fecha.$dirty && formAlta.fecha.$invalid, 'has-success has-feedback': formAlta.fecha.$valid}">
+            <label for="fecha" class="control-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" id="fecha" min="2017-01-01" ng-model="nuevo.fecha" placeholder="Ingrese Fecha" required/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.fecha.$dirty && formAlta.fecha.$invalid, 'glyphicon-ok': formAlta.fecha.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.fecha.$dirty && formAlta.fecha.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+      <!-- HORA -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.hora.$dirty && formAlta.hora.$invalid, 'has-success has-feedback': formAlta.hora.$valid}">
+            <label for="hora" class="control-label">Hora</label>
+            <input type="time" class="form-control" name="hora" id="hora" ng-model="horaAux" placeholder="Ingrese Hora"required value="08:30:00" step="900" min="10:00:00" max="23:30:00"/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.hora.$dirty && formAlta.hora.$invalid, 'glyphicon-ok': formAlta.hora.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.hora.$dirty && formAlta.hora.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+      <!-- CANTIDAD -->
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.cantidad.$dirty && formAlta.cantidad.$invalid, 'has-success has-feedback': formAlta.cantidad.$valid}">
+            <label for="cantidad" class="control-label">Cantidad de personas</label>
+            <input type="number" class="form-control" name="cantidad" id="cantidad" ng-model="nuevo.cantidad" placeholder="Ingrese Cantidad"required min=1 max=60/>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.cantidad.$dirty && formAlta.cantidad.$invalid, 'glyphicon-ok': formAlta.cantidad.$valid}"></span>
+            <small class="help-block" ng-if="formAlta.cantidad.$dirty && formAlta.cantidad.$invalid">* Este campo es obligatorio</small>
+        </div>
+
+      <!-- ENVIAR -->
+        <br>
+        <button class="btn btn-info " name="guardar" ng-click="Guardar()" ><span class="glyphicon glyphicon-send">&nbsp;</span>ENVIAR</button>
+        
+      <!-- VOLVER -->
+        <a ui-sref="main.cliente" class="btn btn-info "><span class="glyphicon glyphicon-repeat">&nbsp;</span>VOLVER</a>
+
+    </form>
+</div>

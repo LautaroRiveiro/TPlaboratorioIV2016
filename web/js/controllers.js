@@ -1,15 +1,45 @@
 angular.module('starter.controllers', [])
 
-.controller('menuCtrl', function($scope, $auth){
+.controller('menuCtrl', function($scope, $auth, $location){
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
-	console.info("usuario", $scope.usuario)
+	console.info("usuario", $scope.usuario);
+	
+	$scope.Logout = function(){
+	    $auth.logout()
+        .then(function() {
+            // Desconectamos al usuario y lo redirijimos
+            $location.path("/login");
+            //return;
+    	})
+    };
 })
 
-.controller('mainCtrl', function($scope, $auth){
+.controller('mainCtrl', function($scope, $auth, $location){
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
 	console.info("usuario main", $scope.usuario);
+
+	$scope.Logout = function(){
+	    $auth.logout()
+        .then(function() {
+            // Desconectamos al usuario y lo redirijimos
+            $location.path("/login");
+            //return;
+    	})
+    };
+})
+
+.controller('clienteCtrl', function($scope, $auth){
+	$('.carousel').carousel();
+
+	$scope.usuario = {};
+	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
+	console.info("usuario main", $scope.usuario);
+
+	$scope.saludar = function(){
+		alert("HOLA");
+	}
 })
 
 .controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state){
@@ -309,7 +339,10 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants){
+.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, $stateParams){
+	$scope.perfil = $stateParams.perfil;
+	//console.info("$scope.perfil",$scope.perfil);
+
 	$scope.nuevo = {};
 	$scope.nuevo.id_usuario = $auth.getPayload().id;
 	$scope.nuevo.importe = 0;
@@ -541,5 +574,9 @@ angular.module('starter.controllers', [])
 		console.info("Error: ", error);
 	});
 
+    
+})
+
+.controller('estadisticasCtrl',function($scope, $http){
     
 });

@@ -1,7 +1,69 @@
-<table>tabla</table>
+<link rel="stylesheet" href="css/cliente.css">
 
-<p>carrito</p>
-<button>hacer pedido</button>
-
-<button>reservar</button>
-<button>organizar evento</button>
+<div class="container">
+	<div class="row container" >
+        <div class="col-md-9">
+            <img src="img/banner-pizza.png" class="img-rounded img-responsive" alt="" style="max-height: 200px">
+		</div>
+        <div class="col-md-2 hidden-xs hidden-sm" style="margin-top: 20px; margin-left: 20px;">
+            <div id="carousel-1" class="carousel slide" data-ride="carousel">
+                <!-- indicadores (puntitos) -->
+                <!-- <ol class="carousel-indicators">
+                    <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-1" data-slide-to="1"></li>
+                </ol> -->
+                <!-- contenedor -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="img/premio1.png" alt="" class="img-rounded img-responsive">
+                    </div>
+                    <div class="item">
+                        <img src="img/premio2.png" alt="" class="img-rounded img-responsive">
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="container contenedor">
+    <br>
+    <div class="row container">
+        <div class="col-md-4">
+            <div class="panel panel-info" style="cursor: pointer;" ui-sref="main.altaPedido({perfil:'cliente'})">
+				<div class="panel-heading">
+				    <h4 class="">HACER PEDIDO</h4>
+				</div>
+				<div class="panel-body">
+				    Acceda al catálogo de todos nuestros productos, mire nuestras ofertas y realice la compra al local que prefiera.
+					<hr>
+				    <img src="img/pedido.png" alt="" class="img-rounded img-responsive">
+				</div>
+				<!-- <div class="panel-footer">Panel footer</div> -->
+			</div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-info" style="cursor: pointer;" ui-sref="main.altaReserva">
+                <div class="panel-heading">
+                    <h4 class="">RESERVAR</h4>
+                </div>
+                <div class="panel-body">
+					Solicite la reserve de mesas en cualquiera de nuestros local para disfrutar con tranquilidad y sin esperar.
+					<br><hr>
+					<img src="img/reserva.png" alt="" class="img-rounded img-responsive">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-info" style="cursor: pointer;" ui-sref="main.altaEvento">
+                <div class="panel-heading">
+                    <h4 class="">ORGANIZAR EVENTO</h4>
+                </div>
+                <div class="panel-body">
+                	Realice una compra con todo lo necesario para su fiesta con 48hs de anticipación. Envío sin cargo.
+                	<br><hr>
+                	<img src="img/evento.png" alt="" class="img-rounded img-responsive">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

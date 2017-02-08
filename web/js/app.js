@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'encuesta.controller', 'login.controllers', 'starter.controllers']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'encuesta.controller', 'login.controllers', 'starter.controllers', 'cliente.controllers']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	
@@ -25,7 +25,8 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         })
         .state('main.cliente', {
             url: '/cliente',
-            templateUrl: 'templates/cliente.html'
+            templateUrl: 'templates/cliente.html',
+            controller: 'clienteCtrl'
         })
         .state('main.altaUsuario', {
             url: '/altaUsuario',
@@ -51,7 +52,18 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
         .state('main.altaPedido', {
             url: '/altaPedido',
             templateUrl: 'templates/altaPedido.html',
-            controller: 'altaPedidoCtrl'
+            controller: 'altaPedidoCtrl',
+            params: {perfil: null}
+        })
+        .state('main.altaEvento', {
+            url: '/altaEvento',
+            templateUrl: 'templates/altaEvento.html',
+            controller: 'altaEventoCtrl'
+        })
+        .state('main.altaReserva', {
+            url: '/altaReserva',
+            templateUrl: 'templates/altaReserva.html',
+            controller: 'altaReservaCtrl'
         })
         .state('main.grillaUsuarios', {
             url: '/grillaUsuarios',
@@ -70,6 +82,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             url: '/grillaPedidos',
             templateUrl: 'templates/grillaPedidos.html',
             controller: 'grillaPedidosCtrl'
+        })
+        .state('main.estadisticas', {
+            url: '/estadisticas',
+            templateUrl: 'templates/estadisticas.html',
+            controller: 'estadisticasCtrl'
         })
         .state('encuesta', {
             url: '/encuesta',

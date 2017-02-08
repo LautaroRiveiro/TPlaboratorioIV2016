@@ -10,7 +10,7 @@
 	<a class="btn btn-primary btn-block" ui-sref="main.grillaUsuarios">VER USUARIOS</a>
 	<a class="btn btn-primary btn-block" ui-sref="main.grillaUsuarios({encargado: true})">VER EMPLEADOS</a>
 	<a class="btn btn-primary btn-block" ui-sref="main.grillaLocales">VER LOCALES</a>
-	<a class="btn btn-primary btn-block" ui-sref="main.usuarios" ng-if="usuario.perfil == 'Administrador'">VER ESTADISTICAS</a>
+	<a class="btn btn-info btn-block" ui-sref="main.estadisticas" ng-if="usuario.perfil == 'Administrador'">ESTADISTICAS</a>
 	</br>
 
 	<button class="btn btn-danger btn-block" ng-click="Logout()">SALIR</button>	

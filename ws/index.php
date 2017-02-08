@@ -389,6 +389,71 @@
 		return $response;		
 	});
 
+#RESERVAS
+	$app->post("/reservas/{reserva}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta de la reserva en un stdClass
+		$reserva = json_decode($args["reserva"]); // $reserva->cantidad = 10
+
+		//Modifico el reserva
+		try{
+			require_once "clases/reserva.php";
+			$respuesta["idAgregado"] = Reserva::Agregar($reserva);
+			$respuesta["mensaje"] = "Se agregó la reserva #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
+	$app->get("/reservas", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de reservas";
+
+		//Traigo todos los reservas
+		require_once "clases/reserva.php";
+		$reservas = Reserva::TraerTodosLasReservas();
+
+		$respuesta["reservas"] = $reservas;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
+#EVENTOS
+	$app->post("/eventos/{evento}", function($request, $response, $args){
+		//Recupero los datos del formulario de alta del evento en un stdClass
+		$evento = json_decode($args["evento"]); // $evento->nombre = "Pizza"
+
+		//Modifico el evento
+		try{
+			require_once "clases/evento.php";
+			$respuesta["idAgregado"] = Evento::Agregar($evento);
+			$respuesta["mensaje"] = "Se agregó el evento #".$respuesta["idAgregado"];
+			
+			require_once "clases/eventos_detalle.php";
+			foreach ($evento->productos as $valor) {
+			    //$valor = $valor * 2;
+			    $respuesta[] = Evento_detalle::Agregar($respuesta["idAgregado"],$valor);
+			}
+			//$respuesta["idAgregado"] = Oferta::Agregar($oferta);
+			//$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
+		}
+		catch (Exception $e){
+			$respuesta["idAgregado"] = "ERROR";
+			$respuesta["error"] = $e;
+		}
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;
+	});
+
 	//Correr la aplicación
 	$app->run();
  ?>
