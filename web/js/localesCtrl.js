@@ -62,7 +62,7 @@ angular.module('locales.controller',[])
 		
 		function fn_coder(datos){
 			var coordenadas = datos[0].geometry.location; //obj Lat-Lon
-
+			
 			var objConfMarkerDV = {
 				position: coordenadas,
 				map: $scope.gMap,

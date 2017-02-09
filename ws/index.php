@@ -300,8 +300,10 @@
 			$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
 			
 			require_once "clases/ofertas_prod.php";
+			//require_once "clases/producto.php";
 			foreach ($oferta->productos as $valor) {
 			    //$valor = $valor * 2;
+			    //$auxProducto = Producto::TraerUnProductoPorId($valor->id);
 			    $respuesta[] = Oferta_prod::Agregar($respuesta["idAgregado"],$valor);
 			}
 			//$respuesta["idAgregado"] = Oferta::Agregar($oferta);
@@ -317,6 +319,38 @@
 		return $response;
 	});
 
+	$app->get("/ofertas", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de ofertas";
+
+		//Incluyo las librerías
+		require_once "clases/oferta.php";
+		require_once "clases/ofertas_prod.php";
+		require_once "clases/producto.php";
+
+		//Traigo todos los ofertas y los detalles
+		$ofertas = Oferta::TraerTodosLasOfertas();
+		$ofertasProd = Oferta_prod::TraerTodosLasOfertasProd();	
+
+		/*Acá lo que hago es agregar, para cada oferta (oferta), un array que contenga el detalle de cada uno de los
+		* productos que componen la oferta (oferta_prod). Además, para completar la descripción de cada uno de estos
+		* productos, le sumo un array con los datos de ese producto (producto). */ 
+		foreach ($ofertas as $oferta) {
+		    foreach ($ofertasProd as $key => $ofProd) {
+		    	if ($oferta->id == $ofProd->id_oferta) {
+		    		$ofProd->productoDetalle = Producto::TraerUnProductoPorId($ofProd->id_producto);
+		    		$oferta->productos[] = $ofProd;
+		    	}
+		    }
+		}
+
+		//Incluyo los datos en la repsuesta a enviar
+		$respuesta["ofertas"] = $ofertas;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
 
 #PEDIDOS
 	$app->post("/pedidos/{pedido}", function($request, $response, $args){
@@ -358,7 +392,7 @@
 		require_once "clases/usuario.php";
 		foreach ($pedidos as $valor) {
 			    //$valor = $valor * 2;
-			    $valor->usuario = Usuario::TraerUnUsuarioPorId($valor->id);;
+			    $valor->usuario = Usuario::TraerUnUsuarioPorId($valor->id_usuario);;
 			}
 
 		$respuesta["pedidos"] = $pedidos;

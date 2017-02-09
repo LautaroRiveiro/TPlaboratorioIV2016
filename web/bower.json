@@ -13,6 +13,7 @@
     "bootstrap": "^3.3.7",
     "satellizer": "^0.15.5",
     "angular-file-upload": "^2.4.1",
-    "angular-ui-grid": "^4.0.2"
+    "angular-ui-grid": "^4.0.2",
+    "highcharts": "^5.0.7"
   }
 }

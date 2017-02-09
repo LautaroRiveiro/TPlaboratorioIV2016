@@ -6,6 +6,7 @@ class Pedido_detalle
 	public $id;
 	public $id_pedido;
 	public $id_item;
+	public $item;
  	public $cantidad;
 //--------------------------------------------------------------------------------//
 
@@ -27,7 +28,10 @@ class Pedido_detalle
 	{
 		return $this->cantidad;
 	}
-
+	public function GetItem()
+	{
+		return $this->item;
+	}
 
 	public function SetId($valor)
 	{
@@ -40,6 +44,10 @@ class Pedido_detalle
 	public function SetIdItem($valor)
 	{
 		$this->id_item = $valor;
+	}
+	public function SetItem($valor)
+	{
+		$this->item = $valor;
 	}
 	public function SetCantidad($valor)
 	{
@@ -65,7 +73,7 @@ class Pedido_detalle
 	public static function TraerUnPedidoDetallePorId($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.cantidad
+		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.item, U.cantidad
 				FROM pedidos_detalle U
 				WHERE U.id = :id";
 
@@ -80,7 +88,7 @@ class Pedido_detalle
 	public static function TraerTodosLosPedidosDetalle(){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.cantidad
+		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.item, U.cantidad
 				FROM pedidos_detalle U";
 
 		$consulta = $conexion->prepare($sql);
@@ -93,12 +101,13 @@ class Pedido_detalle
 	public static function Agregar($id_pedido, $pedidoDetalle){
 		$conexion = self::CrearConexion();
 
-		$sql = "INSERT INTO pedidos_detalle (id_pedido, id_item, cantidad)
-				VALUES (:id_pedido, :id_item, :cantidad)";
+		$sql = "INSERT INTO pedidos_detalle (id_pedido, id_item, item, cantidad)
+				VALUES (:id_pedido, :id_item, :item, :cantidad)";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id_pedido", $id_pedido, PDO::PARAM_INT);
 		$consulta->bindValue(":id_item", $pedidoDetalle->id, PDO::PARAM_INT);
+		$consulta->bindValue(":item", $pedidoDetalle->item, PDO::PARAM_STR);
 		$consulta->bindValue(":cantidad", $pedidoDetalle->cantidad, PDO::PARAM_INT);
 		$consulta->execute();
 
@@ -110,12 +119,13 @@ class Pedido_detalle
 		$conexion = self::CrearConexion();
 
 		$sql = "UPDATE pedidos_detalle
-				SET id_pedido = :id_pedido, id_item = :id_item, cantidad = :cantidad
+				SET id_pedido = :id_pedido, id_item = :id_item, item = item, cantidad = :cantidad
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id_pedido", $pedidoDetalle->id_pedido, PDO::PARAM_INT);
 		$consulta->bindValue(":id_item", $pedidoDetalle->id_item, PDO::PARAM_INT);
+		$consulta->bindValue(":item", $pedidoDetalle->item, PDO::PARAM_STR);
 		$consulta->bindValue(":cantidad", $pedidoDetalle->cantidad, PDO::PARAM_INT);
 		$consulta->bindValue(":id", $pedidoDetalle->id, PDO::PARAM_INT);
 		$consulta->execute();

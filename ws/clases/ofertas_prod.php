@@ -4,8 +4,8 @@ class Oferta_prod
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS (No sé por qué tuve que ponerlos public)
 	public $id;
-	public $idOferta;
- 	public $idProducto;
+	public $id_oferta;
+ 	public $id_producto;
  	public $cantidad;
 //--------------------------------------------------------------------------------//
 
@@ -17,17 +17,16 @@ class Oferta_prod
 	}
 	public function GetIdOferta()
 	{
-		return $this->idOferta;
+		return $this->id_oferta;
 	}
 	public function GetIdProducto()
 	{
-		return $this->idProducto;
+		return $this->id_producto;
 	}
 	public function GetCantidad()
 	{
 		return $this->cantidad;
 	}
-
 
 	public function SetId($valor)
 	{
@@ -35,11 +34,11 @@ class Oferta_prod
 	}
 	public function SetIdOferta($valor)
 	{
-		$this->idOferta = $valor;
+		$this->id_oferta = $valor;
 	}
 	public function SetIdProducto($valor)
 	{
-		$this->idProducto = $valor;
+		$this->id_producto = $valor;
 	}
 	public function SetCantidad($valor)
 	{
@@ -54,8 +53,8 @@ class Oferta_prod
 		if($id !== NULL){
 			$obj = self::TraerUnaOfertaProdPorId($id);
 			$this->id = $obj->GetId();
-			$this->idOferta = $obj->GetIdOferta();
-			$this->idProducto = $obj->GetIdProducto();
+			$this->id_oferta = $obj->GetIdOferta();
+			$this->id_producto = $obj->GetIdProducto();
 			$this->cantidad = $obj->GetCantidad();
 		}
 	}
@@ -90,7 +89,7 @@ class Oferta_prod
 		return $ofertaProd;
 	}
 
-	public static function Agregar($id_oferta, $ofertaProd){
+	public static function Agregar($id_oferta, $ofertaProd, $auxProducto){
 		$conexion = self::CrearConexion();
 
 		$sql = "INSERT INTO ofertas_prod (id_oferta, id_producto, cantidad)

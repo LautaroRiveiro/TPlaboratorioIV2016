@@ -119,6 +119,49 @@ angular.module('starter.controllers', [])
 	$scope.nuevo.foto1 = "sinfoto.jpg";
 	$scope.nuevo.foto2 = "sinfoto.jpg";
 	$scope.nuevo.foto3 = "sinfoto.jpg";
+	$scope.gMap = {};
+	$scope.coordenadas = {};
+
+	//gLatLon = ACA VA LA DECODIFICACION DEL LUGAR
+	$scope.VerLugar = function(){
+
+		var divMapa = document.getElementById('map');
+		var coordenadas = {};
+
+		var gCoder = new google.maps.Geocoder();
+		var objInfo = {
+			address: $scope.nuevo.direccion
+		};
+		gCoder.geocode(objInfo, fn_coder);
+
+		function fn_coder(datos){
+			console.info("DATOS", datos);
+			if (datos.length == 0) {
+				divMapa.innerHTML = "NO SE ENCONTRÓ LA DIRECCIÓN INDICADA";
+				$scope.nuevo.direccion = "";
+				return;
+			}
+			$scope.coordenadas = datos[0].geometry.location;
+
+			$scope.nuevo.direccion = datos[0].address_components[1].short_name + " " + datos[0].address_components[0].long_name;
+			$scope.nuevo.cp = datos[0].address_components[2].short_name;
+
+			var objConf = {
+					zoom: 15,
+					center: $scope.coordenadas
+				};
+			$scope.gMap = new google.maps.Map(divMapa, objConf);
+
+			var objConfMarker = {
+				position: $scope.coordenadas,
+				map: $scope.gMap,
+				title: "Ubicación de la nueva sucursal"
+			}
+
+			var gMarker = new google.maps.Marker(objConfMarker);
+		}
+	}
+
 
 	//Configuración del FileUploader
 	//$scope.uploader = new FileUploader({url: '../ws/clases/upload.php'});
@@ -148,6 +191,11 @@ angular.module('starter.controllers', [])
 
     //Guardar el local en la base de datos
 	$scope.Guardar = function(){
+		if($scope.nuevo.direccion == ""){
+			alert("Debe indicar una dirección");
+			return;
+		}
+
 		//Guardo las fotos en el servidor
 		$scope.cargar();
 		
@@ -336,6 +384,18 @@ angular.module('starter.controllers', [])
 	$scope.nuevo.id_usuario = $auth.getPayload().id;
 	$scope.nuevo.importe = 0;
 
+ //----------------------------- GRILLA PRODUCTOS ------------------------------------------//
+
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
+	.then(function(data){
+		console.info(data.data);
+		$scope.gridOptions.data = data.data.productos
+		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+		console.info("$scope.gridOptions",$scope.gridOptions);
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
 	$scope.gridOptions = {
 		enableRowSelection: true,
     	//enableFullRowSelection: true,
@@ -361,31 +421,6 @@ angular.module('starter.controllers', [])
 		});
 	};
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
-	.then(function(data){
-		console.info(data.data);
-		$scope.gridOptions.data = data.data.productos
-		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
-		console.info("$scope.gridOptions",$scope.gridOptions);
-	}, function(error){
-		console.info("Error: ", error);
-	});
-
-
-	$scope.locales = {};
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
-	.then(function(data){
-		console.info("data.data", data.data);
-		$scope.locales.locales = data.data.locales;
-	}
-	,function(error){
-		console.info("Error: ", error);
-	});
-
-
-
-
-
 	$scope.gridOptions.columnDefs = columProductos();
 	function columProductos () {
         return [
@@ -399,7 +434,83 @@ angular.module('starter.controllers', [])
         ];
     }
 
+ //----------------------------- GRILLA OFERTAS ------------------------------------------//
 
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/ofertas")
+	.then(function(data){
+		$scope.gridOptionsOfertas.data = data.data.ofertas
+		
+		var precioFinalBruto = 0;
+		var precioFinal = 0;
+
+		for (var i in $scope.gridOptionsOfertas.data) {
+			precioFinalBruto = 0;
+			for(var j in $scope.gridOptionsOfertas.data[i].productos) {
+				precioFinalBruto += parseInt($scope.gridOptionsOfertas.data[i].productos[j].cantidad) * parseInt($scope.gridOptionsOfertas.data[i].productos[j].productoDetalle.precio);
+			}
+			precioFinal = parseInt(precioFinalBruto) - (parseInt(data.data.ofertas[i].descuento) * parseInt(precioFinalBruto) / 100);
+			$scope.gridOptionsOfertas.data[i].importe = Math.floor(precioFinal);
+		}
+
+		console.info("$scope.gridOptionsOfertas.data",$scope.gridOptionsOfertas.data);
+
+	}, function(error){
+		console.info("Error: ", error);
+	});
+
+	$scope.gridOptionsOfertas = {
+		enableRowSelection: true,
+    	//enableFullRowSelection: true,
+    	//multiSelect: true
+    	//rowHeight: 50
+    	enableHorizontalScrollbar: 0,
+    	enableVerticalScrollbar: 0
+	};
+
+	$scope.gridOptionsOfertas.onRegisterApi = function(gridApi) {
+	    $scope.myGridApiOfertas = gridApi;
+		$scope.myGridApiOfertas.selection.on.rowSelectionChanged($scope, function (row) {
+		    if (row.isSelected){
+		    	row.entity.cantidad = 1;
+		    }
+		    else{
+		    	row.entity.cantidad = null;
+		    }
+		    if (!this.grid.appScope.buttonClicked) {
+		        //alert(row.isSelected);
+		    }
+		    this.grid.appScope.buttonClicked = false;
+		});
+	};
+
+
+	$scope.gridOptionsOfertas.columnDefs = columProductosOfertas();
+	function columProductosOfertas () {
+        return [
+            { field: 'descripcion', name: 'descripcion'},
+            { field: 'descuento', width: '100', name: 'desc (%)'},
+            { field: 'importe', width: '80', name: 'importe', cellFilter: 'currency'},
+            { field: 'cantidad', name: 'cantidad', width: '80', displayName: 'Cantidad', cellTemplate:"<input type='number' style='height:100%;' min=1 ng-model='row.entity.cantidad' ng-click='grid.appScope.Modificar(row.entity)'></input>"},
+            //{ field: 'imagen', name: 'imagen', displayName: 'Imagen', cellTemplate:'<img width="50px" ng-src="../ws/img/{{row.entity.foto1}}" lazy-src>' },
+            //{ field: 'foto1', name: 'avatar', cellTemplate:"<img width=\"30px\" ng-src=\"../ws/img/{{grid.getCellValue(row, col)}}\" lazy-src>"},
+        	//{ field: 'foto1', name: 'Foto', cellTemplate:"<img height='100%' width='100%' ng-src=\"../ws/img/{{grid.getCellValue(row, col)}}\" lazy-src>"},
+            { field: 'Boton', width: '90', displayName: 'Detalle', cellTemplate:"<button href='#detalle' data-toggle='modal' class='btn btn-info btn-block btn-sm' ng-click='grid.appScope.Detalle(row.entity)'>VER</button>"}
+        ];
+    }
+
+ //----------------------------- LOCALES RADIO ------------------------------------------//
+
+	$scope.locales = {};
+	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales").then(
+		function(data){
+			console.info("data.data", data.data);
+			$scope.locales.locales = data.data.locales;
+		}
+		,function(error){
+			console.info("Error: ", error);
+	});
+
+ //-------------------------------- FUNCIONES -------------------------------------------//
 
     $scope.Modificar = function(row){
       console.info(row);
@@ -423,6 +534,7 @@ angular.module('starter.controllers', [])
 
     $scope.Guardar = function(){
         $scope.nuevo.fecha =  new Date();
+        $scope.nuevo.estado =  "Pedido";
         
         if ($scope.nuevo.id_local == undefined) {
 			alert("Por favor, selecciona un local");
@@ -440,8 +552,20 @@ angular.module('starter.controllers', [])
 			$scope.nuevo.productos[producto] = {};
 			$scope.nuevo.productos[producto].id = arrayAux[producto].id;
 			$scope.nuevo.productos[producto].cantidad = arrayAux[producto].cantidad;
+			$scope.nuevo.productos[producto].item = "producto";
 			console.info("prod: ",$scope.nuevo.productos);
 			$scope.nuevo.importe += parseInt(arrayAux[producto].precio)*parseInt(arrayAux[producto].cantidad);
+		}
+
+        var arrayAuxOferta = $scope.myGridApiOfertas.selection.getSelectedRows();
+        var indice = $scope.nuevo.productos.length;
+        for (var oferta in arrayAuxOferta) {
+			$scope.nuevo.productos[indice] = {};
+			$scope.nuevo.productos[indice].id = arrayAuxOferta[oferta].id;
+			$scope.nuevo.productos[indice].cantidad = arrayAuxOferta[oferta].cantidad;
+			$scope.nuevo.productos[indice].item = "oferta";
+			$scope.nuevo.importe = parseInt($scope.nuevo.importe) + (parseInt(arrayAuxOferta[oferta].importe) * parseInt(arrayAuxOferta[oferta].cantidad));
+			indice ++;
 		}
 
 		if($scope.nuevo.productos.length == 0){
@@ -532,18 +656,7 @@ angular.module('starter.controllers', [])
 	$http.get("http://localhost/TPlaboratorioIV2016/ws/pedidos")
 	.then(function(data){
 		console.info("data.data", data.data);
-
-		if ($stateParams.encargado) {
-			for(var pedido in data.data.pedidos){
-				if (data.data.pedidos[pedido].perfil = "Empleado") {
-					$scope.gridOptions.data.push(data.data.pedidos[pedido]);
-				}
-			}
-		}
-		else{
-			$scope.gridOptions.data = data.data.pedidos
-		}
-		console.info("$scope.gridOptions.data",$scope.gridOptions.data);
+		$scope.gridOptions.data = data.data.pedidos
 	}, function(error){
 		console.info("Error: ", error);
 	});
