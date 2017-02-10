@@ -59,8 +59,11 @@ angular.module('locales.controller',[])
 			address: local.direccion+', '+local.cp
 		};
 		gCoder.geocode(objInfo, fn_coder);
+
+		console.info("objInfo",objInfo);
 		
 		function fn_coder(datos){
+			console.info("DATOS",datos);
 			var coordenadas = datos[0].geometry.location; //obj Lat-Lon
 			
 			var objConfMarkerDV = {

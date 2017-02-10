@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-02-2017 a las 05:19:51
+-- Tiempo de generación: 10-02-2017 a las 17:57:30
 -- Versión del servidor: 10.1.10-MariaDB
 -- Versión de PHP: 5.6.19
 
@@ -88,6 +88,7 @@ DROP TABLE IF EXISTS `locales`;
 CREATE TABLE `locales` (
   `id` int(11) UNSIGNED NOT NULL,
   `direccion` varchar(100) NOT NULL,
+  `cp` varchar(10) NOT NULL,
   `foto1` varchar(50) NOT NULL DEFAULT 'sinfoto.jpg',
   `foto2` varchar(50) NOT NULL DEFAULT 'sinfoto.jpg',
   `foto3` varchar(50) NOT NULL DEFAULT 'sinfoto.jpg'
@@ -97,10 +98,10 @@ CREATE TABLE `locales` (
 -- Volcado de datos para la tabla `locales`
 --
 
-INSERT INTO `locales` (`id`, `direccion`, `foto1`, `foto2`, `foto3`) VALUES
-(1, 'Av. Mitre 850', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
-(2, 'Las Flores 2220', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
-(3, 'Alem 1679', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg');
+INSERT INTO `locales` (`id`, `direccion`, `cp`, `foto1`, `foto2`, `foto3`) VALUES
+(1, 'Av. Bartolomé Mitre 850', 'Avellaneda', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
+(2, 'Av. Las Flores 891', 'Wilde', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
+(3, 'Av. Leandro N. Alem 800', 'CABA', 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg');
 
 -- --------------------------------------------------------
 
@@ -120,11 +121,9 @@ CREATE TABLE `ofertas` (
 --
 
 INSERT INTO `ofertas` (`id`, `descripcion`, `descuento`) VALUES
-(1, 'Pizza muzzarella y Coca', 10),
-(2, 'Prueba', 20),
-(3, 'PRUEBAA', 25),
-(4, 'A VER', 30),
-(5, 'ULTIMA', 40);
+(8, 'Gde Muzza x2 y Agua', 25),
+(9, 'Napolitana   Faina   2 Helados', 10),
+(10, 'Porción Fugazzeta, 2 Empanadas de Carne y Agua', 50);
 
 -- --------------------------------------------------------
 
@@ -145,8 +144,14 @@ CREATE TABLE `ofertas_prod` (
 --
 
 INSERT INTO `ofertas_prod` (`id`, `id_oferta`, `id_producto`, `cantidad`) VALUES
-(1, 5, 1, 5),
-(2, 5, 2, 2);
+(3, 8, 1, 2),
+(4, 8, 2, 1),
+(5, 9, 3, 1),
+(6, 9, 4, 1),
+(7, 9, 6, 2),
+(8, 10, 2, 1),
+(9, 10, 5, 2),
+(10, 10, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -179,7 +184,23 @@ INSERT INTO `pedidos` (`id`, `id_usuario`, `id_local`, `fecha`, `importe`, `esta
 (8, 1, 1, '2017-02-06T20:16:17.797Z', 90, 'Pedido'),
 (9, 1, 1, '2017-02-06T20:16:41.077Z', 30, 'Pedido'),
 (10, 1, 1, '2017-02-06T20:17:29.933Z', 105, 'Pedido'),
-(11, 1, 1, '2017-02-06T20:17:56.045Z', 10, 'Pedido');
+(11, 1, 1, '2017-02-06T20:17:56.045Z', 10, 'Pedido'),
+(12, 1, 1, '2017-02-09T16:36:28.223Z', 80, 'Pedido'),
+(13, 1, 2, '2017-02-09T16:39:46.433Z', 11, 'Pedido'),
+(14, 1, 1, '2017-02-09T16:56:40.881Z', 30, 'Pedido'),
+(15, 1, 3, '2017-02-09T17:03:40.354Z', 131, 'Pedido'),
+(16, 1, 1, '2017-02-09T17:04:01.722Z', 37, 'Pedido'),
+(17, 1, 2, '2017-02-09T17:06:47.113Z', 131, 'Pedido'),
+(18, 1, 1, '2017-02-09T17:14:26.514Z', 131, 'Pedido'),
+(19, 1, 1, '2017-02-09T17:19:45.578Z', 168, 'Pedido'),
+(20, 1, 3, '2017-02-09T17:22:35.370Z', 318, 'Pedido'),
+(21, 1, 3, '2017-02-09T22:32:51.343Z', 189, 'Pedido'),
+(22, 1, 2, '2017-02-09T22:36:08.590Z', 117, 'Pedido'),
+(23, 1, 3, '2017-02-09T23:04:07.352Z', 151, 'Pedido'),
+(24, 1, 3, '2017-02-09T23:05:56.904Z', 131, 'Pedido'),
+(25, 1, 1, '2017-02-09T23:07:36.457Z', 153, 'Pedido'),
+(26, 1, 3, '2017-02-09T23:08:57.448Z', 169, 'Pedido'),
+(27, 1, 1, '2017-02-09T23:10:30.504Z', 269, 'Pedido');
 
 -- --------------------------------------------------------
 
@@ -192,22 +213,67 @@ CREATE TABLE `pedidos_detalle` (
   `id` int(11) NOT NULL,
   `id_pedido` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
-  `cantidad` int(2) NOT NULL
+  `id_oferta` int(11) NOT NULL,
+  `cantidad` int(2) NOT NULL,
+  `precio` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `pedidos_detalle`
 --
 
-INSERT INTO `pedidos_detalle` (`id`, `id_pedido`, `id_item`, `cantidad`) VALUES
-(1, 7, 1, 1),
-(2, 7, 6, 1),
-(3, 8, 3, 1),
-(4, 9, 2, 1),
-(5, 9, 5, 1),
-(6, 10, 2, 1),
-(7, 10, 3, 1),
-(8, 11, 4, 1);
+INSERT INTO `pedidos_detalle` (`id`, `id_pedido`, `id_item`, `id_oferta`, `cantidad`, `precio`) VALUES
+(1, 7, 1, 0, 1, 0),
+(2, 7, 6, 0, 1, 0),
+(3, 8, 3, 0, 1, 0),
+(4, 9, 2, 0, 1, 0),
+(5, 9, 5, 0, 1, 0),
+(6, 10, 2, 0, 1, 0),
+(7, 10, 3, 0, 1, 0),
+(8, 11, 4, 0, 1, 0),
+(12, 13, 6, 0, 1, 0),
+(15, 0, 7, 0, 1, 0),
+(18, 14, 5, 0, 2, 0),
+(24, 19, 2, 0, 1, 0),
+(25, 19, 6, 0, 2, 0),
+(27, 20, 6, 0, 1, 0),
+(28, 20, 7, 0, 1, 0),
+(32, 22, 1, 0, 1, 0),
+(33, 23, 4, 0, 2, 10),
+(34, 24, 6, 0, 2, 11),
+(35, 25, 6, 0, 2, 11),
+(36, 26, 7, 0, 2, 30),
+(37, 27, 1, 0, 2, 80),
+(38, 27, 3, 9, 1, 90),
+(39, 27, 4, 9, 1, 10),
+(40, 27, 6, 9, 1, 11);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedidos_oferta`
+--
+
+DROP TABLE IF EXISTS `pedidos_oferta`;
+CREATE TABLE `pedidos_oferta` (
+  `id` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `id_oferta` int(11) NOT NULL,
+  `cantidad` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `pedidos_oferta`
+--
+
+INSERT INTO `pedidos_oferta` (`id`, `id_pedido`, `id_oferta`, `cantidad`) VALUES
+(1, 21, 9, 1),
+(2, 22, 10, 1),
+(3, 23, 8, 1),
+(4, 24, 9, 1),
+(5, 25, 8, 1),
+(6, 26, 9, 1),
+(7, 27, 9, 1);
 
 -- --------------------------------------------------------
 
@@ -236,7 +302,8 @@ INSERT INTO `productos` (`id`, `descripcion`, `categoria`, `precio`, `foto1`, `f
 (3, 'Pizza napolitana', 'Comida', 90, 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
 (4, 'Faina', 'Comida', 10, 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
 (5, 'Empanada carne', 'Comida', 15, 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
-(6, 'helado', 'Postre', 11, 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg');
+(6, 'helado', 'Postre', 11, 'sinfoto.jpg', 'sinfoto.jpg', 'sinfoto.jpg'),
+(7, 'Porción de fugazzeta rellena', 'Comida', 30, 'slider_small_03.jpg', 'sinfoto.jpg', 'sinfoto.jpg');
 
 -- --------------------------------------------------------
 
@@ -369,6 +436,12 @@ ALTER TABLE `pedidos_detalle`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `pedidos_oferta`
+--
+ALTER TABLE `pedidos_oferta`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -409,27 +482,32 @@ ALTER TABLE `locales`
 -- AUTO_INCREMENT de la tabla `ofertas`
 --
 ALTER TABLE `ofertas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `ofertas_prod`
 --
 ALTER TABLE `ofertas_prod`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT de la tabla `pedidos_detalle`
 --
 ALTER TABLE `pedidos_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+--
+-- AUTO_INCREMENT de la tabla `pedidos_oferta`
+--
+ALTER TABLE `pedidos_oferta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --

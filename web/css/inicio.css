@@ -16,3 +16,7 @@ div{
 	right: 0;
 	font-family: 'Lato', sans-serif;
 }
+
+#locales{
+	border: 1px solid #FFF;
+}
