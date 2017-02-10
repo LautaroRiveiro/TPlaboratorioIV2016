@@ -30,8 +30,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-
-.controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state){
+.controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state, ws){
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -73,7 +72,8 @@ angular.module('starter.controllers', [])
 
 	//Guardar el usuario en la base de datos
 	$scope.Guardar = function(){
-		$http.post("http://localhost/TPlaboratorioIV2016/ws/usuarios/"+JSON.stringify($scope.nuevo))
+		ws.post('usuarios',JSON.stringify($scope.nuevo))
+		//$http.post("http://localhost/TPlaboratorioIV2016/ws/usuarios/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
@@ -87,7 +87,8 @@ angular.module('starter.controllers', [])
 
 	//Modificar el usuario en la base de datos
 	$scope.Modificar = function(){
-		$http.put("http://localhost/TPlaboratorioIV2016/ws/usuarios/"+JSON.stringify($scope.nuevo))
+		ws.put('usuarios',JSON.stringify($scope.nuevo))
+		//$http.put("http://localhost/TPlaboratorioIV2016/ws/usuarios/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Modificación realizada con éxito");
@@ -107,7 +108,7 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaLocalCtrl', function($scope, $auth, $http, FileUploader){
+.controller('altaLocalCtrl', function($scope, $auth, $http, FileUploader, ws){
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -165,7 +166,8 @@ angular.module('starter.controllers', [])
 
 	//Configuración del FileUploader
 	//$scope.uploader = new FileUploader({url: '../ws/clases/upload.php'});
-	$scope.uploader = new FileUploader({url: 'http://localhost/TPlaboratorioIV2016/ws/files'});
+	//$scope.uploader = new FileUploader({url: 'http://localhost/TPlaboratorioIV2016/ws/files'});
+	$scope.uploader = new FileUploader({url: ws.url+'files'});
 	console.info("Uploader", $scope.uploader);
 	$scope.uploader.queueLimit = 3; // indico cuantos archivos permito cargar
 	/* Si quiero restringir los archivos a imagenes añado este filtro */
@@ -218,7 +220,8 @@ angular.module('starter.controllers', [])
 		}		
 		console.info("Local",$scope.nuevo);
 
-		$http.post("http://localhost/TPlaboratorioIV2016/ws/locales/"+JSON.stringify($scope.nuevo))
+		ws.post('locales', JSON.stringify($scope.nuevo))
+		//$http.post("http://localhost/TPlaboratorioIV2016/ws/locales/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
@@ -236,7 +239,7 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaProductoCtrl', function($scope, $auth, $http, FileUploader){
+.controller('altaProductoCtrl', function($scope, $auth, $http, FileUploader, ws){
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -253,7 +256,8 @@ angular.module('starter.controllers', [])
 
 	//Configuración del FileUploader
 	//$scope.uploader = new FileUploader({url: '../ws/clases/upload.php'});
-	$scope.uploader = new FileUploader({url: 'http://localhost/TPlaboratorioIV2016/ws/files'});
+	//$scope.uploader = new FileUploader({url: 'http://localhost/TPlaboratorioIV2016/ws/files'});
+	$scope.uploader = new FileUploader({url: ws.url + 'files'});
 	console.info("Uploader", $scope.uploader);
 	$scope.uploader.queueLimit = 3; // indico cuantos archivos permito cargar
 	/* Si quiero restringir los archivos a imagenes añado este filtro */
@@ -293,7 +297,8 @@ angular.module('starter.controllers', [])
 		}		
 		console.info("Producto",$scope.nuevo);
 
-		$http.post("http://localhost/TPlaboratorioIV2016/ws/productos/"+JSON.stringify($scope.nuevo))
+		ws.post('productos',JSON.stringify($scope.nuevo))
+		//$http.post("http://localhost/TPlaboratorioIV2016/ws/productos/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
@@ -311,7 +316,7 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaOfertaCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants){
+.controller('altaOfertaCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, ws){
 	$scope.gridOptions = {
 		enableRowSelection: true,
     	//enableFullRowSelection: true,
@@ -322,7 +327,8 @@ angular.module('starter.controllers', [])
 	   $scope.myGridApi = gridApi;
 	};
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
+	ws.getAll('productos')
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
 	.then(function(data){
 		console.info(data.data);
 		$scope.gridOptions.data = data.data.productos
@@ -367,7 +373,8 @@ angular.module('starter.controllers', [])
 
 		console.info("LO QUE SE VA A MANDAR POR POST:",$scope.nuevo);
 
-        $http.post("http://localhost/TPlaboratorioIV2016/ws/ofertas/"+JSON.stringify($scope.nuevo))
+		ws.post('ofertas', JSON.stringify($scope.nuevo))
+        //$http.post("http://localhost/TPlaboratorioIV2016/ws/ofertas/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
@@ -380,7 +387,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, $stateParams){
+.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, $stateParams, ws){
 	$scope.perfil = $stateParams.perfil;
 	//console.info("$scope.perfil",$scope.perfil);
 
@@ -390,7 +397,8 @@ angular.module('starter.controllers', [])
 
  //----------------------------- GRILLA PRODUCTOS ------------------------------------------//
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
+ 	ws.getAll('productos')
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
 	.then(function(data){
 		console.info(data.data);
 		$scope.gridOptions.data = data.data.productos
@@ -440,7 +448,8 @@ angular.module('starter.controllers', [])
 
  //----------------------------- GRILLA OFERTAS ------------------------------------------//
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/ofertas")
+ 	ws.getAll('ofertas')
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/ofertas")
 	.then(function(data){
 		$scope.gridOptionsOfertas.data = data.data.ofertas
 		
@@ -505,7 +514,8 @@ angular.module('starter.controllers', [])
  //----------------------------- LOCALES RADIO ------------------------------------------//
 
 	$scope.locales = {};
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales").then(
+	ws.getAll('locales')
+	.then(
 		function(data){
 			console.info("data.data", data.data);
 			$scope.locales.locales = data.data.locales;
@@ -585,14 +595,15 @@ angular.module('starter.controllers', [])
 			indice ++;
 		}
 
-		if($scope.nuevo.productos.length == 0){
+		if($scope.nuevo.productos.length == 0 && $scope.nuevo.ofertas.length == 0){
 			alert("Por favor, selecciona al menos un producto");
 			return;
 		}
 
 		console.info("LO QUE SE VA A MANDAR POR POST:",$scope.nuevo);
 
-        $http.post("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify($scope.nuevo))
+		ws.post('pedidos',JSON.stringify($scope.nuevo))
+        //$http.post("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
@@ -608,7 +619,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams){
+.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, ws){
 
 	console.info("$stateParams",$stateParams);
 	if ($stateParams.encargado) {
@@ -665,7 +676,8 @@ angular.module('starter.controllers', [])
         ];
     }
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/usuarios")
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/usuarios")
+	ws.getAll('usuarios')
 	.then(function(data){
 		console.info("data.data", data.data);
 
@@ -698,7 +710,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('grillaPedidosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams){
+.controller('grillaPedidosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, ws){
 
 	$scope.gridOptions = {
 		// Configuracion para exportar datos a Excel
@@ -739,7 +751,8 @@ angular.module('starter.controllers', [])
 	  console.log( $( this ).text() );
 	});
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/pedidos")
+	ws.getAll('pedidos')
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/pedidos")
 	.then(function(data){
 		console.info("data.data", data.data);
 		$scope.gridOptions.data = data.data.pedidos
@@ -761,7 +774,8 @@ angular.module('starter.controllers', [])
     }
     $scope.Modificar = function(row){
       console.info("row",row);
-      $http.put("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify(row))
+      ws.put('pedidos', JSON.stringify(row))
+      //$http.put("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify(row))
       .then(function(data){
 		console.info("data.data", data.data);
 		$state.reload();
@@ -772,35 +786,28 @@ angular.module('starter.controllers', [])
     }
 })
 
-
-
-
-.controller('grillaLocalesCtrl',function($scope, $http){
+.controller('grillaLocalesCtrl',function($scope, $http, ws){
 
 	$scope.locales = {};
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+	local.getLocales()
 	.then(function(data){
 		console.info(data.data);
 		$scope.locales = data.data.locales;
 		console.info($scope.locales);
 
 		for (var local in $scope.locales) {
-			    $scope.locales[local].foto1 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto1;
-			    $scope.locales[local].foto2 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto2;
-			    $scope.locales[local].foto3 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto3;
+			    //$scope.locales[local].foto1 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto1;
+			    //$scope.locales[local].foto2 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto2;
+			    //$scope.locales[local].foto3 = "http://localhost/TPlaboratorioIV2016/ws/img/"+$scope.locales[local].foto3;
+			    $scope.locales[local].foto1 = ws.url+"img/"+$scope.locales[local].foto1;
+			    $scope.locales[local].foto2 = ws.url+"img/"+$scope.locales[local].foto2;
+			    $scope.locales[local].foto3 = ws.url+"img/"+$scope.locales[local].foto3;
 			    $scope.locales[local].arrayImg = [$scope.locales[local].foto1, $scope.locales[local].foto2, $scope.locales[local].foto3];
 		}
-
 		console.info($scope.locales);
 
 	}, function(error){
 		console.info("Error: ", error);
 	});
-
-    
-})
-
-.controller('estadisticasCtrl',function($scope, $http){
-    
 });

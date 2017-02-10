@@ -1,6 +1,6 @@
 angular.module('locales.controller',[])
 
-.controller('localesCtrl', function($scope, $http, $state){
+.controller('localesCtrl', function($scope, $http, $state, ws){
 
 	//Cargo la geolocalización del usuario en un mapa
 	var divMapa = document.getElementById('map');
@@ -64,7 +64,7 @@ angular.module('locales.controller',[])
 
 	function ObtenerLocales(){
 
-		$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+		ws.getAll('locales')
 		.then(function(data){
 			console.info("data.data", data.data);
 			$scope.locales.locales = data.data.locales;

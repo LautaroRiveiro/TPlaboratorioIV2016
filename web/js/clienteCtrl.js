@@ -13,7 +13,7 @@ angular.module('cliente.controllers',[])
 	}
 })
 
-.controller('altaReservaCtrl', function($scope, $http, $auth, $state){
+.controller('altaReservaCtrl', function($scope, $http, $auth, $state, ws){
 	//Recupero los datos de la sesión del usuario
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -43,8 +43,7 @@ angular.module('cliente.controllers',[])
 	};
 	document.getElementById("fecha").setAttribute("min", FormatoFecha(new Date()));
 
-
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+	ws.getAll('locales')
 	.then(function(data){
 		console.info("data.data", data.data);
 		$scope.locales.locales = data.data.locales;
@@ -65,7 +64,8 @@ angular.module('cliente.controllers',[])
 		$scope.nuevo.fecha.setMinutes($scope.horaAux.getMinutes());
 		console.info("$scope.nuevo: ", $scope.nuevo);
 
-		$http.post("http://localhost/TPlaboratorioIV2016/ws/reservas/"+JSON.stringify($scope.nuevo))
+		ws.post('reservas',(JSON.stringify($scope.nuevo)))
+		//$http.post("http://localhost/TPlaboratorioIV2016/ws/reservas/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Reserva realizada con éxito");
@@ -80,7 +80,7 @@ angular.module('cliente.controllers',[])
 
 })
 
-.controller('altaEventoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants){
+.controller('altaEventoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, ws){
 	$scope.nuevo = {};
 	$scope.nuevo.id_usuario = $auth.getPayload().id;
 	$scope.nuevo.importe = 0;
@@ -109,7 +109,8 @@ angular.module('cliente.controllers',[])
 		});
 	};
 
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
+	ws.getAll('productos')
+	//$http.get("http://localhost/TPlaboratorioIV2016/ws/productos")
 	.then(function(data){
 		console.info(data.data);
 		$scope.gridOptions.data = data.data.productos
@@ -186,7 +187,8 @@ angular.module('cliente.controllers',[])
 
 		console.info("LO QUE SE VA A MANDAR POR POST:",$scope.nuevo);
 
-        $http.post("http://localhost/TPlaboratorioIV2016/ws/eventos/"+JSON.stringify($scope.nuevo))
+		ws.post('eventos',(JSON.stringify($scope.nuevo)))
+        //$http.post("http://localhost/TPlaboratorioIV2016/ws/eventos/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
 			alert("Alta realizada con éxito");
