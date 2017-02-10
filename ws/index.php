@@ -329,8 +329,8 @@
 		require_once "clases/producto.php";
 
 		//Traigo todos los ofertas y los detalles
-		$ofertas = Oferta::TraerTodosLasOfertas();
-		$ofertasProd = Oferta_prod::TraerTodosLasOfertasProd();	
+		$ofertas = Oferta::TraerTodasLasOfertas();
+		$ofertasProd = Oferta_prod::TraerTodasLasOfertasProd();	
 
 		/*Acá lo que hago es agregar, para cada oferta (oferta), un array que contenga el detalle de cada uno de los
 		* productos que componen la oferta (oferta_prod). Además, para completar la descripción de cada uno de estos
@@ -357,6 +357,9 @@
 		//Recupero los datos del formulario de alta del pedido en un stdClass
 		$pedido = json_decode($args["pedido"]); // $pedido->nombre = "Pizza"
 
+		require_once "clases/ofertas_prod.php";
+		$ofertas_prod = Oferta_prod::TraerTodasLasOfertasProd();
+
 		//Modifico el pedido
 		try{
 			require_once "clases/pedido.php";
@@ -367,6 +370,41 @@
 			foreach ($pedido->productos as $valor) {
 			    //$valor = $valor * 2;
 			    $respuesta[] = Pedido_detalle::Agregar($respuesta["idAgregado"],$valor);
+			}
+
+			require_once "clases/pedidos_oferta.php";
+			require_once "clases/producto.php";
+			foreach ($pedido->ofertas as $valor) {
+			    //$valor = $valor * 2;
+			    $respuesta[] = Pedido_oferta::Agregar($respuesta["idAgregado"],$valor);
+
+			    $valor->id; //ID OFERTA
+			    foreach ($ofertas_prod as $key => $ofProd) {
+			    	if ($ofProd->id_oferta == $valor->id) {
+			    		$prod = new stdClass();
+			    		$prod->id = $ofProd->id_producto;
+			    		$prod->cantidad = $valor->cantidad;
+			    		$prod->id_oferta = $ofProd->id_oferta;
+			    		$aux = Producto::TraerUnProductoPorId($ofProd->id_producto);
+			    		$prod->precio = $aux->precio;
+
+
+
+
+		// $consulta->bindValue(":id_pedido", $id_pedido, PDO::PARAM_INT);
+		// $consulta->bindValue(":id_item", $pedidoDetalle->id, PDO::PARAM_INT);
+		// $consulta->bindValue(":id_oferta", $pedidoDetalle->id_oferta, PDO::PARAM_INT);
+		// $consulta->bindValue(":cantidad", $pedidoDetalle->cantidad, PDO::PARAM_INT);
+		// $consulta->bindValue(":precio", $pedidoDetalle->precio, PDO::PARAM_INT);
+
+
+
+
+
+
+			    		$respuesta[] = Pedido_detalle::Agregar($respuesta["idAgregado"],$prod);
+			    	}
+			    }
 			}
 			//$respuesta["idAgregado"] = Oferta::Agregar($oferta);
 			//$respuesta["mensaje"] = "Se agregó la oferta #".$respuesta["idAgregado"];
@@ -486,6 +524,38 @@
 		//Escribo la respuesta en el body del response y lo retorno
 		$response->getBody()->write(json_encode($respuesta));
 		return $response;
+	});
+
+#PEDIDOS_DETALLE
+	$app->get("/pedidos_detalle", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de pedidos_detalle";
+
+		//Traigo todos los pedidos_detalle
+		require_once "clases/pedidos_detalle.php";
+		$pedidos_detalle = Pedido_detalle::TraerTodosLosPedidosDetalle();
+
+		$respuesta["pedidos_detalle"] = $pedidos_detalle;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
+	});
+
+#OFERTAS_PROD
+	$app->get("/ofertas_prod", function($request, $response, $args){
+
+		$respuesta["consulta"] = "Lista de ofertas_prod";
+
+		//Traigo todos los ofertas_prod
+		require_once "clases/ofertas_prod.php";
+		$ofertas_prod = Oferta_prod::TraerTodosLasOfertasProd();
+
+		$respuesta["ofertas_prod"] = $ofertas_prod;
+
+		//Escribo la respuesta en el body del response y lo retorno
+		$response->getBody()->write(json_encode($respuesta));
+		return $response;		
 	});
 
 	//Correr la aplicación

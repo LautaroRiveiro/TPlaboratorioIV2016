@@ -76,7 +76,7 @@ class Oferta_prod
 		return $oferta;
 	}
 
-	public static function TraerTodosLasOfertasProd(){
+	public static function TraerTodasLasOfertasProd(){
 		$conexion = self::CrearConexion();
 
 		$sql = "SELECT U.id, U.id_oferta, U.id_producto, U.cantidad

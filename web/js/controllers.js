@@ -195,6 +195,10 @@ angular.module('starter.controllers', [])
 			alert("Debe indicar una dirección");
 			return;
 		}
+		if($scope.nuevo.cp == ""){
+			alert("Presionar botón para verificar domicilio");
+			return;
+		}
 
 		//Guardo las fotos en el servidor
 		$scope.cargar();
@@ -546,13 +550,16 @@ angular.module('starter.controllers', [])
         console.info("Productos: ",$scope.myGridApi.selection.getSelectedRows());
 
         $scope.nuevo.productos = [];
+        $scope.nuevo.ofertas = [];
         var arrayAux = $scope.myGridApi.selection.getSelectedRows();
         for (var producto in arrayAux) {
 			//$scope.nuevo.productos.push(arrayAux[producto]);
 			$scope.nuevo.productos[producto] = {};
 			$scope.nuevo.productos[producto].id = arrayAux[producto].id;
 			$scope.nuevo.productos[producto].cantidad = arrayAux[producto].cantidad;
-			$scope.nuevo.productos[producto].item = "producto";
+			$scope.nuevo.productos[producto].id_oferta = 0;
+			$scope.nuevo.productos[producto].precio = arrayAux[producto].precio;
+			
 			console.info("prod: ",$scope.nuevo.productos);
 			$scope.nuevo.importe += parseInt(arrayAux[producto].precio)*parseInt(arrayAux[producto].cantidad);
 		}
@@ -560,10 +567,20 @@ angular.module('starter.controllers', [])
         var arrayAuxOferta = $scope.myGridApiOfertas.selection.getSelectedRows();
         var indice = $scope.nuevo.productos.length;
         for (var oferta in arrayAuxOferta) {
-			$scope.nuevo.productos[indice] = {};
-			$scope.nuevo.productos[indice].id = arrayAuxOferta[oferta].id;
-			$scope.nuevo.productos[indice].cantidad = arrayAuxOferta[oferta].cantidad;
-			$scope.nuevo.productos[indice].item = "oferta";
+			
+
+        	$scope.nuevo.ofertas[oferta] = {};
+			$scope.nuevo.ofertas[oferta].id = arrayAuxOferta[oferta].id;	//Id de la oferta
+			$scope.nuevo.ofertas[oferta].cantidad = arrayAuxOferta[oferta].cantidad;	//Cantidad
+
+			// for (var i = Things.length - 1; i >= 0; i--) {
+			// 	Things[i]
+			// }
+
+			// $scope.nuevo.productos[indice] = {};
+			// $scope.nuevo.productos[indice].id = arrayAuxOferta[oferta].id;
+			// $scope.nuevo.productos[indice].cantidad = arrayAuxOferta[oferta].cantidad;
+			// $scope.nuevo.productos[indice].item = "oferta";
 			$scope.nuevo.importe = parseInt($scope.nuevo.importe) + (parseInt(arrayAuxOferta[oferta].importe) * parseInt(arrayAuxOferta[oferta].cantidad));
 			indice ++;
 		}

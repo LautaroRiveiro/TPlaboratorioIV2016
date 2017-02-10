@@ -6,8 +6,9 @@ class Pedido_detalle
 	public $id;
 	public $id_pedido;
 	public $id_item;
-	public $item;
+	public $id_oferta;
  	public $cantidad;
+ 	public $precio;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -28,9 +29,12 @@ class Pedido_detalle
 	{
 		return $this->cantidad;
 	}
-	public function GetItem()
+	public function GetIdOferta()
 	{
-		return $this->item;
+		return $this->id_oferta;
+	}
+	public function GetPrecio(){
+		return $this->precio;
 	}
 
 	public function SetId($valor)
@@ -45,13 +49,16 @@ class Pedido_detalle
 	{
 		$this->id_item = $valor;
 	}
-	public function SetItem($valor)
+	public function SetIdOferta($valor)
 	{
-		$this->item = $valor;
+		$this->id_oferta = $valor;
 	}
 	public function SetCantidad($valor)
 	{
 		$this->cantidad = $valor;
+	}
+	public function SetPrecio($valor){
+		$this->precio = $valor;
 	}
 
 
@@ -64,7 +71,9 @@ class Pedido_detalle
 			$this->id = $obj->GetId();
 			$this->id_pedido = $obj->GetIdPedido();
 			$this->id_item = $obj->GetIdItem();
+			$this->id_oferta = $obj->GetIdOferta();
 			$this->cantidad = $obj->GetCantidad();
+			$this->precio = $obj->GetPrecio();
 		}
 	}
 
@@ -73,7 +82,7 @@ class Pedido_detalle
 	public static function TraerUnPedidoDetallePorId($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.item, U.cantidad
+		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.id_oferta, U.cantidad, U.precio
 				FROM pedidos_detalle U
 				WHERE U.id = :id";
 
@@ -88,7 +97,7 @@ class Pedido_detalle
 	public static function TraerTodosLosPedidosDetalle(){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.item, U.cantidad
+		$sql = "SELECT U.id, U.id_pedido, U.id_item, U.id_oferta, U.cantidad, U.precio
 				FROM pedidos_detalle U";
 
 		$consulta = $conexion->prepare($sql);
@@ -101,14 +110,15 @@ class Pedido_detalle
 	public static function Agregar($id_pedido, $pedidoDetalle){
 		$conexion = self::CrearConexion();
 
-		$sql = "INSERT INTO pedidos_detalle (id_pedido, id_item, item, cantidad)
-				VALUES (:id_pedido, :id_item, :item, :cantidad)";
+		$sql = "INSERT INTO pedidos_detalle (id_pedido, id_item, id_oferta, cantidad, precio)
+				VALUES (:id_pedido, :id_item, :id_oferta, :cantidad, :precio)";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id_pedido", $id_pedido, PDO::PARAM_INT);
 		$consulta->bindValue(":id_item", $pedidoDetalle->id, PDO::PARAM_INT);
-		$consulta->bindValue(":item", $pedidoDetalle->item, PDO::PARAM_STR);
+		$consulta->bindValue(":id_oferta", $pedidoDetalle->id_oferta, PDO::PARAM_INT);
 		$consulta->bindValue(":cantidad", $pedidoDetalle->cantidad, PDO::PARAM_INT);
+		$consulta->bindValue(":precio", $pedidoDetalle->precio, PDO::PARAM_INT);
 		$consulta->execute();
 
 		$idAgregado = $conexion->lastInsertId();
@@ -119,14 +129,15 @@ class Pedido_detalle
 		$conexion = self::CrearConexion();
 
 		$sql = "UPDATE pedidos_detalle
-				SET id_pedido = :id_pedido, id_item = :id_item, item = item, cantidad = :cantidad
+				SET id_pedido = :id_pedido, id_item = :id_item, id_oferta = id_oferta, cantidad = :cantidad, precio = :precio
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id_pedido", $pedidoDetalle->id_pedido, PDO::PARAM_INT);
 		$consulta->bindValue(":id_item", $pedidoDetalle->id_item, PDO::PARAM_INT);
-		$consulta->bindValue(":item", $pedidoDetalle->item, PDO::PARAM_STR);
+		$consulta->bindValue(":id_oferta", $pedidoDetalle->id_oferta, PDO::PARAM_INT);
 		$consulta->bindValue(":cantidad", $pedidoDetalle->cantidad, PDO::PARAM_INT);
+		$consulta->bindValue(":precio", $pedidoDetalle->precio, PDO::PARAM_INT);
 		$consulta->bindValue(":id", $pedidoDetalle->id, PDO::PARAM_INT);
 		$consulta->execute();
 

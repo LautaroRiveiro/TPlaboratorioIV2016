@@ -1,14 +1,17 @@
 <div style="margin: 10px;margin:auto; display:block; width: 60%;">
     <form id="fgh" name="formAlta" enctype="multipart/form-data" novalidate method="post">
       <!-- DIRECCION -->
-        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.direccion.$dirty && formAlta.direccion.$invalid, 'has-success has-feedback': formAlta.direccion.$valid}">
+        <div class="form-group" ng-class="{'has-error has-feedback': formAlta.direccion.$dirty && formAlta.direccion.$invalid, 'has-success has-feedback': formAlta.direccion.$valid}" style="width: 87%;float:left;">
             <label for="direccion" class="control-label">Dirección</label>
             <input type="text" class="form-control" name="direccion" id="direccion" ng-model="nuevo.direccion" placeholder="Ingrese Dirección"required maxlength=50/>
             <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': formAlta.direccion.$dirty && formAlta.direccion.$invalid, 'glyphicon-ok': formAlta.direccion.$valid}"></span>
             <small class="help-block" ng-if="formAlta.direccion.$dirty && formAlta.direccion.$invalid">* Este campo es obligatorio</small>      
         </div>
-<button ng-click="VerLugar()">VER</button>
-        <div id="map" style="width: 95%; height: 320px; margin: 0 auto;border: 1px solid grey; margin: 10px;">ACA VA EL MAPA</div>
+
+        <button ng-click="VerLugar()" class="btn btn-info" style="width: 10%; float:left;vertical-align:bottom;margin-top: 24.5px;margin-left: 5px;">VER</button>
+        <div style="clear:both"></div>
+        
+        <div id="map" style="width: 95%; height: 320px; margin: 0 auto;border: 1px dotted grey; margin: 10px;"></div>
 
       <!-- IMÁGENES -->
         <label class="control-label">Imágenes</label>

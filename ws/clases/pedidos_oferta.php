@@ -1,11 +1,12 @@
 <?php
-class Oferta
+class Pedido_oferta
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS (No sé por qué tuve que ponerlos public)
 	public $id;
- 	public $descripcion;
- 	public $descuento;
+	public $id_pedido;
+	public $id_oferta;
+ 	public $cantidad;
 //--------------------------------------------------------------------------------//
 
 //--------------------------------------------------------------------------------//
@@ -14,13 +15,17 @@ class Oferta
 	{
 		return $this->id;
 	}
-	public function GetDescripcion()
+	public function GetIdPedido()
 	{
-		return $this->descripcion;
+		return $this->id_pedido;
 	}
-	public function GetDescuento()
+	public function GetIdOferta()
 	{
-		return $this->descuento;
+		return $this->id_oferta;
+	}
+	public function GetCantidad()
+	{
+		return $this->cantidad;
 	}
 
 
@@ -28,13 +33,17 @@ class Oferta
 	{
 		$this->id = $valor;
 	}
-	public function SetDescripcion($valor)
+	public function SetIdPedido($valor)
 	{
-		$this->descripcion = $valor;
+		$this->id_pedido = $valor;
 	}
-	public function SetDescuento($valor)
+	public function SetIdOferta($valor)
 	{
-		$this->descuento = $valor;
+		$this->id_oferta = $valor;
+	}
+	public function SetCantidad($valor)
+	{
+		$this->cantidad = $valor;
 	}
 
 
@@ -43,76 +52,72 @@ class Oferta
 	public function __construct($id=NULL)
 	{
 		if($id !== NULL){
-			$obj = self::TraerUnaOfertaPorId($id);
+			$obj = self::TraerUnPedidoOfertaPorId($id);
 			$this->id = $obj->GetId();
-			$this->descripcion = $obj->GetDescripcion();
-			$this->descuento = $obj->GetDescuento();
+			$this->id_pedido = $obj->GetIdPedido();
+			$this->id_oferta = $obj->GetIdOferta();
+			$this->cantidad = $obj->GetCantidad();
 		}
 	}
 
 //--------------------------------------------------------------------------------//
-//--TOSTRING	
-  	public function ToString()
-	{
-	  	return $this->id." - ".$this->descripcion." - ".$this->descuento."\r\n";
-	}
-//--------------------------------------------------------------------------------//
-//--------------------------------------------------------------------------------//
 //--METODO DE CLASE
-	public static function TraerUnaOfertaPorId($id){
+	public static function TraerUnPedidoOfertaPorId($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.descripcion, U.descuento
-				FROM ofertas U
+		$sql = "SELECT U.id, U.id_pedido, U.id_oferta, U.cantidad
+				FROM pedidos_oferta U
 				WHERE U.id = :id";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->bindValue(":id", $id, PDO::PARAM_INT);
 		$consulta->execute();
 
-		$oferta = $consulta->fetchObject('Oferta');
+		$oferta = $consulta->fetchObject('Pedido_oferta');
 		return $oferta;
 	}
 
-	public static function TraerTodasLasOfertas(){
+	public static function TraerTodosLosPedidosOferta(){
 		$conexion = self::CrearConexion();
 
-		$sql = "SELECT U.id, U.descripcion, U.descuento
-				FROM ofertas U";
+		$sql = "SELECT U.id, U.id_pedido, U.id_oferta, U.cantidad
+				FROM pedidos_oferta U";
 
 		$consulta = $conexion->prepare($sql);
 		$consulta->execute();
 
-		$oferta = $consulta->fetchall(PDO::FETCH_CLASS, 'Oferta');
-		return $oferta;
+		$pedidoOferta = $consulta->fetchall(PDO::FETCH_CLASS, 'Pedido_oferta');
+		return $pedidoOferta;
 	}
 
-	public static function Agregar($oferta){
+	public static function Agregar($id_pedido, $pedidoOferta){
 		$conexion = self::CrearConexion();
 
-		$sql = "INSERT INTO ofertas (descripcion, descuento)
-				VALUES (:descripcion, :descuento)";
+		$sql = "INSERT INTO pedidos_oferta (id_pedido, id_oferta, cantidad)
+				VALUES (:id_pedido, :id_oferta, :cantidad)";
 
 		$consulta = $conexion->prepare($sql);
-		$consulta->bindValue(":descripcion", $oferta->descripcion, PDO::PARAM_STR);
-		$consulta->bindValue(":descuento", $oferta->descuento, PDO::PARAM_INT);
+		$consulta->bindValue(":id_pedido", $id_pedido, PDO::PARAM_INT);
+		$consulta->bindValue(":id_oferta", $pedidoOferta->id, PDO::PARAM_INT);
+		$consulta->bindValue(":cantidad", $pedidoOferta->cantidad, PDO::PARAM_INT);
 		$consulta->execute();
 
 		$idAgregado = $conexion->lastInsertId();
 		return $idAgregado;
 	}
 
-	public static function Modificar($oferta){
+	public static function Modificar($pedidoOferta){
 		$conexion = self::CrearConexion();
 
-		$sql = "UPDATE ofertas
-				SET descripcion = :descripcion, descuento = :descuento
+		$sql = "UPDATE pedidos_oferta
+				SET id_pedido = :id_pedido, id_oferta = :id_oferta, cantidad = :cantidad
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
-		$consulta->bindValue(":descripcion", $oferta->descripcion, PDO::PARAM_STR);
-		$consulta->bindValue(":descuento", $oferta->descuento, PDO::PARAM_INT);
-		$consulta->bindValue(":id", $oferta->id, PDO::PARAM_INT);
+		$consulta->bindValue(":id_pedido", $pedidoOferta->id_pedido, PDO::PARAM_INT);
+		$consulta->bindValue(":id_oferta", $pedidoOferta->id_oferta, PDO::PARAM_INT);
+		$consulta->bindValue(":cantidad", $pedidoOferta->cantidad, PDO::PARAM_INT);
+		$consulta->bindValue(":id", $pedidoOferta->id, PDO::PARAM_INT);
 		$consulta->execute();
 
 		$cantidad = $consulta->rowCount();
@@ -122,7 +127,7 @@ class Oferta
 	public static function Eliminar($id){
 		$conexion = self::CrearConexion();
 
-		$sql = "DELETE FROM ofertas
+		$sql = "DELETE FROM pedidos_oferta
 				WHERE id = :id";
 
 		$consulta = $conexion->prepare($sql);
