@@ -6,10 +6,33 @@ angular.module('locales.controller',[])
 	var divMapa = document.getElementById('map');
 	var gLatLon;
 	var dr = new google.maps.DirectionsRenderer();
+	var geolocalizacionHabilitada = true;
 
 	navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
 
-	function fn_mal(){}
+	function fn_mal(){
+		//alert("Habilitar geolocalización");
+		$('#leyenda').html("Para poder ver cómo llegar debe habilitar la ubicacion y actualizar la página");
+		geolocalizacionHabilitada = false;
+		var lugar;
+		var gCoder = new google.maps.Geocoder();
+		
+		var objInfo = {
+			address: "Buenos Aires, CABA"
+		};
+		gCoder.geocode(objInfo, fn_coder);
+		function fn_coder(datos){
+			console.info("DATOS",datos);
+			lugar = datos[0].geometry.location; //obj Lat-Lon
+			var objConf = {
+				zoom: 12,
+				center: lugar
+			};
+			$scope.gMap = new google.maps.Map(divMapa, objConf);
+		};
+
+		ObtenerLocales();
+	}
 
 	function fn_ok(rta){
 		var lat = rta.coords.latitude;
@@ -30,26 +53,31 @@ angular.module('locales.controller',[])
 		}
 		var gMarker = new google.maps.Marker(objConfMarker);
 
-		gMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+		gMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+
+		ObtenerLocales();
 	}
 
 
 	//Recupero el listado de todos los locales
 	$scope.locales = {};
-	
-	$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
-	.then(function(data){
-		console.info("data.data", data.data);
-		$scope.locales.locales = data.data.locales;
 
-		for (var i in data.data.locales) {
-			$scope.MostrarMarcador(data.data.locales[i]);
+	function ObtenerLocales(){
+
+		$http.get("http://localhost/TPlaboratorioIV2016/ws/locales")
+		.then(function(data){
+			console.info("data.data", data.data);
+			$scope.locales.locales = data.data.locales;
+
+			for (var i in data.data.locales) {
+				$scope.MostrarMarcador(data.data.locales[i]);
+			}
 		}
-	}
-	,function(error){
-		console.info("Error: ", error);
-	});
+		,function(error){
+			console.info("Error: ", error);
+		});
 
+	};
 
 	//Función para agregar un Marcador en función de un Local
 	$scope.MostrarMarcador = function(local){
@@ -88,6 +116,12 @@ angular.module('locales.controller',[])
 
 	//Función para mostrar el trayecto entre el usuario y el Local
 	$scope.MostrarTrayecto = function(local){
+		
+		if (!geolocalizacionHabilitada) {
+			alert("Debes habilitar la ubicación y actualizar la página para ver cómo llegar");
+			return;
+		}
+
 		dr.setMap(null);
 
 		var objConfDR = {
