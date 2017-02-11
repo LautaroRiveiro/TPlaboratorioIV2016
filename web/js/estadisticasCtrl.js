@@ -1,7 +1,9 @@
 angular.module('estadisticas.controller',[])
 
-.controller('estadisticasCtrl', function($scope, $http, ws){
-
+.controller('estadisticasCtrl', function($scope, $http, usuario, ws){
+    usuario.VerificarLogueado();
+    usuario.VerificarPerfil('Administrador');
+    
     //------------------------------ CHART PEDIDOS ----------------------------------------//
     $scope.producto = {};
     var categorias = [];

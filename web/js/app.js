@@ -98,6 +98,11 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
             templateUrl: 'templates/encuesta.html',
             controller: 'encuestaCtrl'
         })
+        .state('404', {
+            url: '/404',
+            templateUrl: 'templates/404.html',
+            controller: 'denegadoCtrl'  
+        })
 	
 	$urlRouterProvider.otherwise('');
 

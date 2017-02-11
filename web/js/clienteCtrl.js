@@ -1,7 +1,9 @@
 angular.module('cliente.controllers',[])
 
 
-.controller('clienteCtrl', function($scope, $auth){
+.controller('clienteCtrl', function($scope, $auth, usuario){
+	usuario.VerificarLogueado();
+
 	$('.carousel').carousel();
 
 	$scope.usuario = {};
@@ -13,7 +15,9 @@ angular.module('cliente.controllers',[])
 	}
 })
 
-.controller('altaReservaCtrl', function($scope, $http, $auth, $state, ws){
+.controller('altaReservaCtrl', function($scope, $http, $auth, $state, usuario, ws){
+	usuario.VerificarLogueado();
+
 	//Recupero los datos de la sesión del usuario
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -80,7 +84,9 @@ angular.module('cliente.controllers',[])
 
 })
 
-.controller('altaEventoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, ws){
+.controller('altaEventoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, usuario, ws){
+	usuario.VerificarLogueado();
+
 	$scope.nuevo = {};
 	$scope.nuevo.id_usuario = $auth.getPayload().id;
 	$scope.nuevo.importe = 0;

@@ -19,7 +19,7 @@
         <li role="presentation"  class="dropdown" ng-if="usuario.perfil != 'Cliente'">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Altas <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li ng-if="usuario.perfil == 'Administrador'"><a ui-sref="main.altaUsuario">Alta Usuario</a></li>
+            <li><a ui-sref="main.altaUsuario">Alta Usuario</a></li>
             <li ng-if="usuario.perfil == 'Administrador'"><a ui-sref="main.altaLocal">Alta Local</a></li>
             <li><a ui-sref="main.altaProducto">Alta Producto</a></li>
             <li><a ui-sref="main.altaOferta">Alta Oferta</a></li>
@@ -28,15 +28,17 @@
           </ul>
         </li>
 
-        <li role="presentation"  class="dropdown" ng-if="usuario.perfil != 'Cliente'">
+        <li role="presentation"  class="dropdown" ng-if="usuario.perfil != 'Cliente' && usuario.perfil != 'Empleado'">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a ui-sref="main.altaUsuarios">Ver Usuario</a></li>
-            <li><a ui-sref="main.altaLocal">Ver Local</a></li>
-            <li><a ui-sref="main.altaProducto">Ver Producto</a></li>
-            <li><a ui-sref="main.altaOferta">Ver Oferta</a></li>
+            <li><a ui-sref="main.grillaUsuarios({encargado: false})" ng-if="usuario.perfil == 'Administrador'">Ver Usuarios</a></li>
+            <li><a ui-sref="main.grillaUsuarios({encargado: true})">Ver Empleados</a></li>
+            <li><a ui-sref="main.grillaPedidos">Ver Pedidos</a></li>
+            <li><a ui-sref="main.grillaLocales">Ver Locales</a></li>
+            <!-- <li><a ui-sref="main.altaProducto">Ver Producto</a></li> -->
+            <!-- <li><a ui-sref="main.altaOferta">Ver Oferta</a></li> -->
             <!-- <li class="divider"></li> -->
-            <li><a ui-sref="main.altaPedido">Ver Pedido</a></li>
+            
           </ul>
         </li>
 
@@ -54,6 +56,13 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li><a>{{usuario.nombre}} ({{usuario.perfil}})</a></li>
+        <li role="presentation"  class="dropdown" ng-if="usuario.perfil != 'Cliente'">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Perfil <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a ui-sref="main.cliente" ng-if="usuario.perfil != 'Cliente'">Operar como Cliente</a></li>
+            <li><a ui-sref="main.menu" ng-if="usuario.perfil != 'Cliente'">Operar como Empleado</a></li>
+          </ul>
+        </li>
         <li><a ng-click="Logout()" style="color:FireBrick; cursor: pointer;">Salir&nbsp;<span class="glyphicon glyphicon-off" aria-hidden="true" ></span></a></li>
       </ul>
     </div>

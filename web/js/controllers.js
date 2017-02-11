@@ -1,46 +1,48 @@
 angular.module('starter.controllers', [])
 
-.controller('menuCtrl', function($scope, $auth, $location){
-	$scope.usuario = {};
-	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
-	console.info("usuario", $scope.usuario);
+.controller('menuCtrl', function($scope, $auth, $location, usuario){
+	usuario.VerificarLogueado();
+
+	$scope.usuario = usuario.Datos();
+
+	$scope.Logout = function(){
+    	usuario.Salir();
+    };
+})
+
+.controller('mainCtrl', function($scope, $auth, $location, usuario){
+	usuario.VerificarLogueado();
+
+	$scope.usuario = usuario.Datos();
+
+	$scope.Logout = function(){
+		usuario.Salir();
+    };
+})
+
+.controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state, usuario, ws){
+	usuario.VerificarLogueado();
+	//usuario.VerificarPerfil('Encargado');
+	$scope.nuevo = {}
 	
-	$scope.Logout = function(){
-	    $auth.logout()
-        .then(function() {
-            // Desconectamos al usuario y lo redirijimos
-            $location.path("/login");
-            //return;
-    	})
-    };
-})
-
-.controller('mainCtrl', function($scope, $auth, $location){
-	$scope.usuario = {};
-	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
-	console.info("usuario main", $scope.usuario);
-
-	$scope.Logout = function(){
-	    $auth.logout()
-        .then(function() {
-            // Desconectamos al usuario y lo redirijimos
-            $location.path("/login");
-            //return;
-    	})
-    };
-})
-
-.controller('altaUsuarioCtrl', function($scope, $auth, $http, $stateParams, $state, ws){
 	//Recupero datos de la sesión
-	$scope.usuario = {};
-	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
-	console.info("usuario", $scope.usuario);
+	$scope.usuario = usuario.Datos();
+	console.info("$scope.usuario",$scope.usuario);
+	if ($scope.usuario.perfil == "Empleado"){
+		$scope.nuevo.perfil = "Cliente";
+		$("#perfilazo").prop('disabled', 'disabled');
+	}
+	else if($scope.usuario.perfil == "Encargado"){
+		$("#perfilazo option[value='Encargado']").remove();
+	}
+
+	//$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
+	//console.info("usuario", $scope.usuario);
 	console.info("$stateParams",$stateParams);
 	$scope.encargado = {};
 	$scope.encargado.encargado = $stateParams.encargado;
-	
+
 	//Objeto para el nuevo usuario
-	$scope.nuevo = {}
 	if($stateParams.obj == null){
 		$scope.estado = "alta";
 		$scope.nuevo.nombre = "Prueba";
@@ -67,8 +69,11 @@ angular.module('starter.controllers', [])
 		}*/
 		$scope.nuevo.sexo = $stateParams.obj.sexo;
 		$scope.nuevo.perfil = $stateParams.obj.perfil;
-	}
 
+		if($scope.usuario.perfil == "Encargado"){
+			$("#perfilazo").prop('disabled', 'disabled');
+		}
+	}
 
 	//Guardar el usuario en la base de datos
 	$scope.Guardar = function(){
@@ -80,6 +85,7 @@ angular.module('starter.controllers', [])
 			for (var campo in $scope.nuevo) {
 			    $scope.nuevo[campo] = "";
 			}
+			$scope.formAlta.$pristine = true;
 		}, function(error){
 			console.info("Error: ", error);
 		});
@@ -108,7 +114,10 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaLocalCtrl', function($scope, $auth, $http, FileUploader, ws){
+.controller('altaLocalCtrl', function($scope, $auth, $http, FileUploader, usuario, ws){
+	usuario.VerificarLogueado();
+	usuario.VerificarPerfil('Administrador');
+	
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -239,7 +248,9 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaProductoCtrl', function($scope, $auth, $http, FileUploader, ws){
+.controller('altaProductoCtrl', function($scope, $auth, $http, FileUploader, usuario, ws){
+	usuario.VerificarLogueado();
+
 	//Recupero datos de la sesión
 	$scope.usuario = {};
 	$scope.usuario = JSON.parse(JSON.stringify($auth.getPayload()));
@@ -316,12 +327,21 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('altaOfertaCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, ws){
+.controller('altaOfertaCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, i18nService, usuario, ws){
+	usuario.VerificarLogueado();
+
 	$scope.gridOptions = {
 		enableRowSelection: true,
     	//enableFullRowSelection: true,
-    	multiSelect: true
+    	multiSelect: true,
+    	//Configuracion de Paginación
+		paginationPageSizes: [10, 20, 30],
+		paginationPageSize: 10,
+		minRowsToShow: 10
 	};
+
+	//Idioma de la grilla en Español
+	i18nService.setCurrentLang('es');
 
 	$scope.gridOptions.onRegisterApi = function(gridApi) {
 	   $scope.myGridApi = gridApi;
@@ -387,7 +407,9 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, $stateParams, ws){
+.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, i18nService, $stateParams, usuario, ws){
+	usuario.VerificarLogueado();
+
 	$scope.perfil = $stateParams.perfil;
 	//console.info("$scope.perfil",$scope.perfil);
 
@@ -414,8 +436,16 @@ angular.module('starter.controllers', [])
     	//multiSelect: true
     	//rowHeight: 50
     	enableHorizontalScrollbar: 0,
-    	enableVerticalScrollbar: 0
+    	enableVerticalScrollbar: 0,
+
+    	//Configuracion de Paginación
+		paginationPageSizes: [10, 20, 30],
+		paginationPageSize: 10,
+		minRowsToShow: 10
 	};
+
+	//Idioma de la grilla en Español
+	i18nService.setCurrentLang('es');
 
 	$scope.gridOptions.onRegisterApi = function(gridApi) {
 	    $scope.myGridApi = gridApi;
@@ -477,7 +507,12 @@ angular.module('starter.controllers', [])
     	//multiSelect: true
     	//rowHeight: 50
     	enableHorizontalScrollbar: 0,
-    	enableVerticalScrollbar: 0
+    	enableVerticalScrollbar: 0,
+
+    	//Configuracion de Paginación
+		paginationPageSizes: [5, 10, 15],
+		paginationPageSize: 5,
+		minRowsToShow: 5
 	};
 
 	$scope.gridOptionsOfertas.onRegisterApi = function(gridApi) {
@@ -619,7 +654,8 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, ws){
+.controller('grillaUsuariosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, usuario, ws){
+	usuario.VerificarLogueado();
 
 	console.info("$stateParams",$stateParams);
 	if ($stateParams.encargado) {
@@ -710,7 +746,8 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('grillaPedidosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, ws){
+.controller('grillaPedidosCtrl', function($scope, $auth, $http, uiGridConstants, i18nService, $state, $stateParams, usuario, ws){
+	usuario.VerificarLogueado();
 
 	$scope.gridOptions = {
 		// Configuracion para exportar datos a Excel
@@ -747,6 +784,9 @@ angular.module('starter.controllers', [])
 		}
 	};
 
+	//Idioma de la grilla en Español
+	i18nService.setCurrentLang('es');
+
 	$( "#estadoPedido" ).on( "change", function() {
 	  console.log( $( this ).text() );
 	});
@@ -774,6 +814,12 @@ angular.module('starter.controllers', [])
     }
     $scope.Modificar = function(row){
       console.info("row",row);
+
+      if (row.nuevoEstado == undefined){
+      		alert("Indicar un estado");
+      		return;
+      }
+
       ws.put('pedidos', JSON.stringify(row))
       //$http.put("http://localhost/TPlaboratorioIV2016/ws/pedidos/"+JSON.stringify(row))
       .then(function(data){
@@ -786,11 +832,12 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('grillaLocalesCtrl',function($scope, $http, ws){
+.controller('grillaLocalesCtrl',function($scope, $http, usuario, ws){
+	usuario.VerificarLogueado();
 
 	$scope.locales = {};
 
-	local.getLocales()
+	ws.getAll('locales')
 	.then(function(data){
 		console.info(data.data);
 		$scope.locales = data.data.locales;
@@ -810,4 +857,23 @@ angular.module('starter.controllers', [])
 	}, function(error){
 		console.info("Error: ", error);
 	});
+
+	$('.carousel').carousel({
+		interval: false
+	});
+})
+
+.controller('denegadoCtrl', function($scope, $auth, $location, usuario, $state){
+	usuario.VerificarLogueado();
+
+	$scope.usuario = usuario.Datos();
+
+	$scope.Volver = function(){
+		if($scope.usuario.perfil == "Cliente"){
+			$state.go("main.cliente");
+		}
+		else{
+			$location.path("/main/menu");
+		}
+    };
 });

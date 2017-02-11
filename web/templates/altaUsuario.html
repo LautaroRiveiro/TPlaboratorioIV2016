@@ -17,10 +17,10 @@
         </div>
 
         <!-- PERFIL -->
-        <div class="form-group" ng-if="!encargado.encargado">
+        <div class="form-group" ng-disabled="encargado.encargado || usuario.perfil == 'Empleado'">
             <label class="control-label">Perfil</label>
             <br>
-            <select class="form-control" name="perfil" ng-model="nuevo.perfil" required>
+            <select class="form-control" id="perfilazo" name="perfil" ng-model="nuevo.perfil" required>
                 <option value="Cliente">Cliente</option>
                 <option value="Encargado">Encargado</option>
                 <option value="Empleado">Empleado</option>
