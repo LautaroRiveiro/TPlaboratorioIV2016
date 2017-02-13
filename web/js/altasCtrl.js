@@ -434,7 +434,7 @@ angular.module('altas.controllers', [])
     }
 })
 
-.controller('altaPedidoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, i18nService, $stateParams, usuario, ws){
+.controller('altaPedidoCtrl', function($scope, $auth, $http, $state, FileUploader, uiGridConstants, i18nService, $stateParams, usuario, ws){
 	usuario.VerificarLogueado();
 
 	$scope.perfil = $stateParams.perfil;
@@ -548,7 +548,9 @@ angular.module('altas.controllers', [])
 	    $scope.myGridApiOfertas = gridApi;
 		$scope.myGridApiOfertas.selection.on.rowSelectionChanged($scope, function (row) {
 		    if (row.isSelected){
-		    	row.entity.cantidad = 1;
+		    	if (row.entity.cantidad == undefined || row.entity.cantidad == null){
+		    		row.entity.cantidad = 1;
+		    	}
 		    }
 		    else{
 		    	row.entity.cantidad = null;
@@ -683,6 +685,9 @@ angular.module('altas.controllers', [])
 			console.info("Datos: ", data);
 			if(confirm("Su pedido ha sido realizado con éxito. Por favor, le pedimos completar la siguiente encuesta, haciendo click en Aceptar.")){
 				$("#encuesta").modal();
+			}
+			else{
+				$state.reload();
 			}
 			for (var campo in $scope.nuevo.productos) {
 			    $scope.nuevo.productos[campo] = null;

@@ -2,8 +2,20 @@
   <h2>Bienvenido!</h2>
 </div>
 
+<!-- ALERT ALTA -->
+<div class="alert alert-success alert-dismissible" role="alert" id="alertaBienvenida" hidden style="margin-top: -30px !important; width: 90%;margin: 5px auto;">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Bienvenido, {{bienvenido}}!</strong> Por favor ingrese sus credenciales para operar.
+</div>
+
+<!-- ALERT ERROR LOGIN -->
+<div class="alert alert-danger alert-dismissible" role="alert" id="alertaError" hidden style="margin-top: -30px !important; width: 90%;margin: 5px auto;">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Error!</strong> Usuario o contraseña incorrecta.
+</div>
+
 <!-- LOGIN -->
-<form ng-submit="Loguear()" method="post" ng-if="estado == 'login'" style="margin: 10px;margin:auto; display:block; width: 50%;">
+<form ng-submit="Loguear()" name="formLogin" method="post" ng-if="estado == 'login'" style="margin: 10px;margin:auto; display:block; width: 50%;">
 	<div class="form-group">
 		<label for="correo">Email</label>
         <input type="email" class="form-control" id="correo" ng-model="usuario.email">

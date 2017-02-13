@@ -30,6 +30,8 @@ angular.module('miApp')
 				else{
 					console.log("Usuario o contraseña incorrecta");
 					console.log(resp);
+					$('#alertaBienvenida').hide();
+					$('#alertaError').fadeIn(1000);
 					usuario.password = "";
 				}
 			})

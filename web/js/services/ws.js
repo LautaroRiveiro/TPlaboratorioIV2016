@@ -3,6 +3,7 @@ angular.module('miApp')
 .service('ws', function($http){
 
 	this.url = "http://localhost/TPlaboratorioIV2016/ws/";
+	//this.url = "http://lautaroriveiro.esy.es/ws/";
 
 	this.getAll = function(clase){
 		return $http.get(this.url+clase);

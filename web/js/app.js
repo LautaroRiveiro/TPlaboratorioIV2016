@@ -110,6 +110,8 @@ app.config(function($stateProvider, $urlRouterProvider, $authProvider){
     //Configuración del Satellizer
     $authProvider.loginUrl = "TPlaboratorioIV2016/ws/auth/login";
     $authProvider.signupUrl = "TPlaboratorioIV2016/ws/auth/signup";
+    //$authProvider.loginUrl = "http://lautaroriveiro.esy.es/ws/auth/login";
+    //$authProvider.signupUrl = "http://lautaroriveiro.esy.es/ws/auth/signup";
     $authProvider.tokenName = "miToken";
     $authProvider.tokenPrefix = "miApp";
     $authProvider.authHeader = 'data';

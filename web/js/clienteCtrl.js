@@ -84,7 +84,7 @@ angular.module('cliente.controllers',[])
 
 })
 
-.controller('altaEventoCtrl', function($scope, $auth, $http, FileUploader, uiGridConstants, usuario, ws){
+.controller('altaEventoCtrl', function($scope, $auth, $http, $state, FileUploader, uiGridConstants, usuario, ws){
 	usuario.VerificarLogueado();
 
 	$scope.nuevo = {};
@@ -103,7 +103,9 @@ angular.module('cliente.controllers',[])
 	    $scope.myGridApi = gridApi;
 		$scope.myGridApi.selection.on.rowSelectionChanged($scope, function (row) {
 		    if (row.isSelected){
-		    	row.entity.cantidad = 1;
+		    	if (row.entity.cantidad == undefined || row.entity.cantidad == null){
+		    		row.entity.cantidad = 1;
+		    	}
 		    }
 		    else{
 		    	row.entity.cantidad = null;
@@ -197,12 +199,13 @@ angular.module('cliente.controllers',[])
         //$http.post("http://localhost/TPlaboratorioIV2016/ws/eventos/"+JSON.stringify($scope.nuevo))
 		.then(function(data){
 			console.info("Datos: ", data);
-			alert("Alta realizada con éxito");
+			alert("Su encargo ha sido registrado con éxito");
 			for (var campo in $scope.nuevo.productos) {
 			    $scope.nuevo.productos[campo] = null;
 			}
 			$scope.nuevo.importe = 0;
 			console.info("Datos borrados: ", $scope.nuevo);
+			$state.reload();
 			//$scope.myGridApi.selection.clearSelectedRows();
 		}, function(error){
 			console.info("Error: ", error);

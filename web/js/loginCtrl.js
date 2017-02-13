@@ -3,7 +3,10 @@ angular.module('login.controllers', [])
 .controller('loginCtrl', function($scope, $auth, $location, $http, $state, usuario){
 	
 	$scope.estado = "login";
+	$scope.bienvenido = "";
 	$scope.usuario = {};
+	$scope.usuario.email = "";
+	$scope.usuario.password = "";
 	$scope.nuevo = {};
 	$scope.nuevo.perfil = "Cliente";
 
@@ -22,24 +25,25 @@ angular.module('login.controllers', [])
      * Si hubo algún error en la conexión, se ejecuta la función de error del then(), donde muestro por consola el error.
     */
 	$scope.Loguear = function(){
+		if ($scope.usuario.email == "" || $scope.usuario.password == "") {
+			alert("Completar los campos!");
+			return;
+		}
 		usuario.Loguear($scope.usuario);
 	};
 
 	$scope.SignUp = function(){
-		console.log("FF");
-		//$auth.removeToken();
-		//console.info("isAuthenticated: ", $auth.isAuthenticated());
-
-      $auth.signup($scope.nuevo)
+        $auth.signup($scope.nuevo)
         .then(function(response) {
-            console.info("Ok", response);
-            console.info("Nuevo usuario: ", $auth.getPayload());
-			if($auth.getPayload().perfil == "Cliente"){
-				$state.go("main.cliente");
+            console.info("response", response);
+			for (var campo in $scope.nuevo) {
+			    $scope.nuevo[campo] = "";
 			}
-			else{
-				$state.go("main.menu");	
-			}
+			$scope.nuevo.perfil = "Cliente";
+			$scope.estado = "login";
+			$scope.bienvenido = response.data.datosDB.nombre;
+			$('#alertaError').hide();
+			$('#alertaBienvenida').fadeIn(1000);
         })
         .catch(function(error) {
 			//Error durante registración
@@ -50,7 +54,7 @@ angular.module('login.controllers', [])
 
 	$scope.Registrarse = function(){
 		$scope.estado = "signup";
-		console.info("getPayload: ", $auth.getPayload());
+		//console.info("getPayload: ", $auth.getPayload());
 	}
 
 	$scope.Volver = function(){
