@@ -15,7 +15,7 @@
 	<button type="submit" class="btn btn-primary" style="margin: 5px auto; display:block;width: 24%;">INGRESAR</button>
 </form>
 
-<div ng-if="estado == 'login'" style="margin: 10px;margin:auto; display:block; width: 30%;">
+<div ng-if="estado == 'login'" style="margin: 10px;margin:auto; display:block; width: 30%; text-align: center;">
     <button class="btn btn-info" ng-click="Registrarse()" style="margin:auto; display:block;width: 40%;">REGISTRARSE</button>
     <br>
     <button class="btn btn-default btn-block" ng-click="CargarDatos('CLIENTE')">CLIENTE</button>
@@ -23,6 +23,8 @@
     <button class="btn btn-default btn-block" ng-click="CargarDatos('ENCARGADO')">ENCARGADO</button>
     <button class="btn btn-default btn-block" ng-click="CargarDatos('ADMINISTRADOR')">ADMINISTRADOR</button>
     <button class="btn btn-default btn-block" ng-click="CargarDatos('')">LIMPIAR</button>
+    <hr>
+    <span style="cursor: pointer; font-weight: bold;" ui-sref="inicio"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>&nbsp;VOLVER AL INICIO&nbsp;&nbsp;</span>
 </div>
 
 <!-- SIGN-UP -->

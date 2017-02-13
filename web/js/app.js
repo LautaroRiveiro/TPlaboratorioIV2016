@@ -1,4 +1,4 @@
-var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'ui.grid.autoResize', 'ui.grid.pagination', 'encuesta.controller', 'login.controllers', 'starter.controllers', 'cliente.controllers', 'estadisticas.controller', 'locales.controller', 'ui.grid.exporter']);
+var app = angular.module("miApp", ['ui.router', 'satellizer', 'angularFileUpload', 'ui.grid', 'ui.grid.selection', 'ui.grid.autoResize', 'ui.grid.pagination', 'encuesta.controller', 'login.controllers', 'starter.controllers', 'cliente.controllers', 'altas.controllers', 'grillas.controllers', 'estadisticas.controller', 'locales.controller', 'ui.grid.exporter', 'directivas']);
 
 app.config(function($stateProvider, $urlRouterProvider, $authProvider){
 	

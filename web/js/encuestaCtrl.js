@@ -1,8 +1,8 @@
 angular.module('encuesta.controller',[])
 
-.controller('encuestaCtrl', function($scope, usuario){
+.controller('encuestaCtrl', function($scope, usuario, $state, ws){
 	//usuario.VerificarLogueado();
-	
+	console.log("ESTOY ADENTRO");
 	$scope.encuesta = {};
 	$scope.encuesta.prueba = "Prueba";
 
@@ -15,15 +15,40 @@ angular.module('encuesta.controller',[])
 	$scope.encuesta.pregunta6 = 1;
 	//$scope.encuesta.pregunta7 = {};
 
-	$scope.Guardar = function(){
+	$scope.GuardarEncuesta = function(){
 		if ($scope.encuesta.pregunta7 == undefined) {$scope.encuesta.pregunta7 = {};};
-		if ($scope.encuesta.pregunta7.uno == undefined) {$scope.encuesta.pregunta7.uno = false;};
-		if ($scope.encuesta.pregunta7.dos == undefined) {$scope.encuesta.pregunta7.dos = false;};
-		if ($scope.encuesta.pregunta7.tres == undefined) {$scope.encuesta.pregunta7.tres = false;};
-		if ($scope.encuesta.pregunta7.cuatro == undefined) {$scope.encuesta.pregunta7.cuatro = false;};
-		if ($scope.encuesta.pregunta7.cinco == undefined) {$scope.encuesta.pregunta7.cinco = false;};
+		// if ($scope.encuesta.pregunta7.uno == undefined || $scope.encuesta.pregunta7.uno == false) {$scope.encuesta.pregunta7.uno = 0;};
+		// if ($scope.encuesta.pregunta7.dos == undefined || $scope.encuesta.pregunta7.uno == false) {$scope.encuesta.pregunta7.dos = 0;};
+		// if ($scope.encuesta.pregunta7.tres == undefined || $scope.encuesta.pregunta7.uno == false) {$scope.encuesta.pregunta7.tres = 0;};
+		// if ($scope.encuesta.pregunta7.cuatro == undefined || $scope.encuesta.pregunta7.uno == false) {$scope.encuesta.pregunta7.cuatro = 0;};
+		// if ($scope.encuesta.pregunta7.cinco == undefined || $scope.encuesta.pregunta7.uno == false) {$scope.encuesta.pregunta7.cinco = 0;};
+
+		$scope.encuesta.pregunta7.uno = ($scope.encuesta.pregunta7.uno == undefined || $scope.encuesta.pregunta7.uno == false) ? 0 : 1;
+		$scope.encuesta.pregunta7.dos = ($scope.encuesta.pregunta7.dos == undefined || $scope.encuesta.pregunta7.dos == false) ? 0 : 1;
+		$scope.encuesta.pregunta7.tres = ($scope.encuesta.pregunta7.tres == undefined || $scope.encuesta.pregunta7.tres == false) ? 0 : 1;
+		$scope.encuesta.pregunta7.cuatro = ($scope.encuesta.pregunta7.cuatro == undefined || $scope.encuesta.pregunta7.cuatro == false) ? 0 : 1;
+		$scope.encuesta.pregunta7.cinco = ($scope.encuesta.pregunta7.cinco == undefined || $scope.encuesta.pregunta7.cinco == false) ? 0 : 1;
 
 		console.info("Lo que se va a enviar", $scope.encuesta);
+
+
+		ws.post('encuestas', JSON.stringify($scope.encuesta))
+        //$http.post("http://localhost/TPlaboratorioIV2016/ws/ofertas/"+JSON.stringify($scope.nuevo))
+		.then(function(data){
+			console.info("Datos: ", data);
+			alert("Gracias por responder la encuesta");
+			// for (var campo in $scope.encuesta) {
+			//     $scope.encuesta[campo] = "";
+			// }
+		}, function(error){
+			console.info("Error: ", error);
+		});
+
+		$('#encuesta').modal('hide');
+		$('body').removeClass('modal-open');
+		$('.modal-backdrop').remove();
+
+		$state.reload();
 		return;
 	}
 });

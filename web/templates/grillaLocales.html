@@ -1,4 +1,4 @@
-<div ng-repeat="(key, local) in locales" style="margin: 0 auto; margin-bottom: 50px; text-align: center; float: left;">
+<div ng-repeat="(key, local) in locales" style="margin: 0 auto; margin-bottom: 50px; text-align: center; float: left; width: 50%;">
 
 
         <div id="carousel-{{key}}" class="carousel slide" style="margin: 0 auto; text-align: center;">
@@ -22,12 +22,11 @@
             </div>
         </div>
 		
-		<h5>{{local.direccion}}</h5>
-		<h6>({{local.cp}})</h6>
+		<h4 style="width: 100%;">{{local.direccion}}</h4>
+		<h5>({{local.cp}})</h5>
 
     
 </div>
-
 <style>
 /*	div.c-wrapper{
     width: 30%;  for example 

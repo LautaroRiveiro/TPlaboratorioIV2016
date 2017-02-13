@@ -30,6 +30,8 @@
         <a ui-sref="main.menu" class="btn btn-info" ng-if="perfil != 'cliente'"><span class="glyphicon glyphicon-repeat">&nbsp;</span>VOLVER</a>
         <a ui-sref="main.cliente" class="btn btn-info" ng-if="perfil == 'cliente'"><span class="glyphicon glyphicon-repeat">&nbsp;</span>VOLVER</a>
 
+        <button id='continuar' href="#encuesta" data-toggle='modal' class="btn btn-primary" hidden style="display: none !important;">CONTINUAR CON LA ENCUESTA</button>
+
     </form>
 </div>
 <br><br>
@@ -77,4 +79,54 @@
   overflow-x: auto !important;
   overflow-y: auto !important;
 }
+.ui-dialog
+{
+    z-index: 101;
+}
 </style>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="encuesta">
+  <div class="modal-dialog  modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><center> ENCUESTA DE SATISFACCIÓN </center></h4>
+      </div>
+      <div class="modal-body">
+          <div class="container" style="width: 100%">
+              <div dv-encuesta></div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="detalleOferta">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{detalleOferta.descripcion}}</h4>
+      </div>
+      <div class="modal-body">
+          <div class="container" style="margin: auto; width: 100%">
+              <p class="page-header" style="margin-top: 0px !important;">APROVECHE!! - {{detalleOferta.descuento}}% DE DESCUENTO!</p>
+              <ul class="list-group">
+                <li ng-repeat="(key, value) in detalleOferta.productos" class="list-group-item" ><p> <strong>{{value.cantidad}}</strong> {{value.productoDetalle.descripcion}} (Precio de lista ${{value.productoDetalle.precio}} c/u)</p></li>
+              </ul>
+              <strong>IMPORTE FINAL: $ {{detalleOferta.importe}}</strong>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

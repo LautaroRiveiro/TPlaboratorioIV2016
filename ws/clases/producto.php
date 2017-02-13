@@ -181,6 +181,18 @@ class Producto
 		return $cantidad;
 	}
 
+	public static function ProximoID(){
+		$conexion = self::CrearConexion();
+		$sql = "SELECT AUTO_INCREMENT
+				FROM information_schema.tables
+				WHERE table_name = 'productos'
+				AND table_schema = DATABASE()";
+		$consulta = $conexion->prepare($sql);
+		$consulta->execute();
+		$id = $consulta->fetch();
+		return $id;
+	}
+	
 	public static function CrearConexion(){
 		try
 		{

@@ -1,7 +1,7 @@
-<div class="container">
-    <div class="page-header">
+<div class="container" style="width: 100%;">
+<!--     <div class="page-header">
         <center> ENCUESTA DE SATISFACCIÓN </center>     
-    </div>
+    </div> -->
     <div class="CajaInicio animated bounceInRight">
         <em>Esta breve encuesta es muy importante para nosotros porque nos permite seguir mejorando la calidad de nuestro servicio. Gracias por completarla!</em>
         <br><br>
@@ -95,7 +95,7 @@
                 <textarea class="form-control" ng-model="encuesta.comentario" name="comentario" id="comentario" cols="20" rows="5"placeholder="Ingrese Comentarios" maxlength=150></textarea>
             </div>
 
-            <button class="btn btn-info " name="guardar" ng-click="Guardar()" ng-disabled="formAlta.$invalid"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</button>
+            <a class="btn btn-info " name="guardar" ng-click="GuardarEncuesta()" ng-disabled="formAlta.$invalid"><span class="glyphicon glyphicon-save">&nbsp;</span>ENVIAR</a>
             
             <hr>
             <pre>{{encuesta | json}}</pre>
